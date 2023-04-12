@@ -545,7 +545,7 @@
     <string name="security_error_invalid_file_access">Security error: Invalid file access!</string>
     <string name="no_application_to_share_uri">No app found to share URI</string>
     <string name="share_uri_with">Share URI with…</string>
-    <string name="welcome_header" translatable="false">Join the Conversation</string>
+    <string name="welcome_header" translatable="false">Willkommen beim KWO Messenger</string>
     <string name="welcome_header_quicksy">Welcome to Quicksy!</string>
     <string name="welcome_text_quicksy_static" translatable="false"><![CDATA[· Quicksy syncs your contact list in regular intervals to make suggestions about possible contacts who are already on Quicksy even when the app is closed or not in use.<br>· Quicksy shares and stores images, audio recordings, videos and other media to deliver them to the intended recipients. Files will be stored for up to 30 days.<br><br>Find more information in our <a href="https://quicksy.im/privacy.htm">Privacy Policy</a>.]]></string>
     <string name="agree_and_continue">Agree and continue</string>

@@ -24,9 +24,11 @@ import eu.siacs.conversations.databinding.ActivityUriHandlerBinding;
 import eu.siacs.conversations.http.HttpConnectionManager;
 import eu.siacs.conversations.persistance.DatabaseBackend;
 import eu.siacs.conversations.services.QuickConversationsService;
+import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.ProvisioningUtils;
 import eu.siacs.conversations.utils.SignupUtils;
 import eu.siacs.conversations.utils.XmppUri;
+import eu.siacs.conversations.utils.Compatibility;
 import eu.siacs.conversations.xmpp.Jid;
 
 import okhttp3.Call;
@@ -123,7 +125,92 @@ public class UriHandlerActivity extends AppCompatActivity {
         return handleUri(uri, false);
     }
 
+    /*
+    private String getRootDomain(final String result) {
+        String fulldomain = "";
+        String rootdomain = "";
+        if (result.startsWith("domain=")) {
+            String[] results = result.split("&");
+            fulldomain = results[0].substring(("domain=").length());
+            rootdomain = fulldomain.substring(fulldomain.indexOf(".") + 1);
+        }
+        return rootdomain;
+    }
+
+    private void addAccount(final String domain, final String username, final String password) {
+        Jid jid = Jid.of(username.toLowerCase(), domain, null);
+        if (!jid.getEscapedLocal().equals(jid.getLocal()) || username.length() < 3) {
+            Toast.makeText(this, R.string.invalid_jid, Toast.LENGTH_SHORT).show();
+        } else {
+            Account account = xmppConnectionService.findAccountByJid(jid);
+            if (account == null) {
+                account = new Account(jid, password);
+                account.setOption(Account.OPTION_REGISTER, false);
+                account.setOption(Account.OPTION_DISABLED, false);
+                account.setOption(Account.OPTION_MAGIC_CREATE, false);
+                xmppConnectionService.createAccount(account);
+                FirstStartManager firstStartManager = new FirstStartManager(this);
+                if (firstStartManager.isFirstTimeLaunch()) {
+                    Intent intent = new Intent(this, SetSettingsActivity.class);
+                    intent.putExtra("setup", true);
+                    startActivity(intent);
+                    overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+                } else {
+                    Intent intent = new Intent(this, PublishProfilePictureActivity.class);
+                    intent.putExtra(PublishProfilePictureActivity.EXTRA_ACCOUNT, account.getJid().asBareJid().toEscapedString());
+                    intent.putExtra("setup", true);
+                    startActivity(intent);
+                    overridePendingTransition(R.animator.fade_in, R.animator.fade_out);
+                }
+            }
+        }
+        finish();
+    }
+    */
+    
     private boolean handleUri(final Uri uri, final boolean scanned) {
+        //KWO: handle provisioning url
+        final Intent intent;
+        final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(true);
+        if (accounts.size() > 0) {
+            //KWO: taken from originalHandleUri() below
+            final XmppUri xmppUri = new XmppUri(uri);
+            if (xmppUri.isAction(XmppUri.ACTION_MESSAGE) || xmppUri.isValidJid()) {
+                return originalHandleUri(uri, scanned);
+            } else {
+                showError(R.string.invalid_jid);
+                return false;
+            }
+        } else {
+            final Uri result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
+            Jid jid = Jid.ofLocalAndDomain(result.getQueryParameter("user"), result.getQueryParameter("domain"));
+            Log.d("DOMAIN", result.getQueryParameter("domain").toLowerCase());
+            Log.d("MAGIC", Config.MAGIC_CREATE_DOMAIN);
+            if (result.getQueryParameter("domain").toLowerCase().endsWith(Config.MAGIC_CREATE_DOMAIN)) {
+                if (jid.getEscapedLocal() != null && accounts.contains(jid.asBareJid())) {
+                    showError(R.string.account_already_exists);
+                    return false;
+                }
+        
+                //KWO: this block is taken from ProvisioningUtils.java
+                final Intent serviceIntent = new Intent(this, XmppConnectionService.class);
+                serviceIntent.setAction(XmppConnectionService.ACTION_PROVISION_ACCOUNT);
+                serviceIntent.putExtra("address", jid.asBareJid().toEscapedString());
+                serviceIntent.putExtra("password", result.getQueryParameter("token"));
+                Compatibility.startService(this, serviceIntent);
+                intent = new Intent(this, EditAccountActivity.class);
+                intent.putExtra("jid", jid.asBareJid().toEscapedString());
+                intent.putExtra("init", true);
+            } else {
+                showError(R.string.account_registrations_are_not_supported);
+                return false;
+            }
+        }
+        startActivity(intent);
+        return true;
+    }
+
+    private boolean originalHandleUri(final Uri uri, final boolean scanned) {
         final Intent intent;
         final XmppUri xmppUri = new XmppUri(uri);
         final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(false);
@@ -250,6 +337,12 @@ public class UriHandlerActivity extends AppCompatActivity {
     }
 
     private void showError(@StringRes int error) {
+        this.binding.progress.setVisibility(View.INVISIBLE);
+        this.binding.error.setText(error);
+        this.binding.error.setVisibility(View.VISIBLE);
+    }
+    
+    private void showError(String error) {
         this.binding.progress.setVisibility(View.INVISIBLE);
         this.binding.error.setText(error);
         this.binding.error.setVisibility(View.VISIBLE);

@@ -17,7 +17,7 @@ public final class Config {
     private static final int OPENPGP = 2;
     private static final int OMEMO = 8;
 
-    private static final int ENCRYPTION_MASK = UNENCRYPTED | OPENPGP | OMEMO;
+    private static final int ENCRYPTION_MASK = UNENCRYPTED;//KWO: | OPENPGP | OMEMO;
 
     public static boolean supportUnencrypted() {
         return (ENCRYPTION_MASK & UNENCRYPTED) != 0;
@@ -43,11 +43,12 @@ public final class Config {
 
     public static final boolean QUICK_LOG = false;
 
-    public static final Jid BUG_REPORTS = Jid.of("bugs@conversations.im");
-    public static final Uri HELP = Uri.parse("https://help.conversations.im");
+    public static final Jid BUG_REPORTS = Jid.of("service@kurswahl-online.de");
+    public static final Uri HELP = Uri.parse("https://kurswahl-online.de");
 
-    public static final String DOMAIN_LOCK = null; // only allow account creation for this domain
-    public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
+
+    public static final String DOMAIN_LOCK = null; //only allow account creation for this domain
+    public static final String MAGIC_CREATE_DOMAIN = "kurswahl-online.de";
     public static final Jid QUICKSY_DOMAIN = Jid.of("quicksy.im");
 
     public static final String CHANNEL_DISCOVERY = "https://search.jabber.network";
@@ -119,7 +120,7 @@ public final class Config {
     public static final boolean AUTOMATICALLY_COMPLETE_SESSIONS = true;
     public static final boolean DISABLE_PROXY_LOOKUP =
             false; // disables STUN/TURN and Proxy65 look up (useful to debug IBB fallback)
-    public static final boolean USE_DIRECT_JINGLE_CANDIDATES = true;
+    public static final boolean USE_DIRECT_JINGLE_CANDIDATES = false;
     public static final boolean USE_JINGLE_MESSAGE_INIT = true;
 
     public static final boolean JINGLE_MESSAGE_INIT_STRICT_OFFLINE_CHECK = false;

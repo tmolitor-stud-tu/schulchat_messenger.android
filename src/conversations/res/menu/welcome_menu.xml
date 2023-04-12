@@ -8,7 +8,7 @@
         android:title="@string/scan_qr_code"
         android:visible="@bool/show_qr_code_scan"
         app:showAsAction="ifRoom" />
-
+<!--KWO:
     <item
         android:id="@+id/action_add_account_with_cert"
         android:title="@string/action_add_account_with_certificate"
@@ -19,4 +19,5 @@
         android:id="@+id/action_import_backup"
         android:title="@string/restore_backup"
         app:showAsAction="never" />
+-->
 </menu>

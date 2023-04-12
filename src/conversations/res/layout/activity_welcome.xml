@@ -52,22 +52,13 @@
                         android:textAppearance="@style/TextAppearance.Conversations.Body1" />
 
                     <Button
-                        android:id="@+id/register_new_account"
-                        style="@style/Widget.Conversations.Button.Borderless"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:text="@string/create_new_account"
-                        android:textColor="?colorAccent" />
-
-                    <Button
                         android:id="@+id/use_existing"
                         style="@style/Widget.Conversations.Button.Borderless"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:text="@string/i_already_have_an_account"
-                        android:textColor="?android:textColorSecondary" />
+                        android:text="QR-Code Scannen"
+                        android:textColor="?colorAccent" />
                 </LinearLayout>
 
                 <RelativeLayout
