@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ import static eu.siacs.conversations.utils.PermissionUtils.writeGranted;
 
 public class WelcomeActivity extends XmppActivity implements XmppConnectionService.OnAccountCreated, KeyChainAliasCallback {
 
+    private Menu menu;
     private static final int REQUEST_IMPORT_BACKUP = 0x63fb;
 
     private XmppUri inviteUri;
@@ -122,12 +124,16 @@ public class WelcomeActivity extends XmppActivity implements XmppConnectionServi
         ActivityWelcomeBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_welcome);
         setSupportActionBar(binding.toolbar);
         configureActionBar(getSupportActionBar(), false);
+        /*KWO:
         binding.registerNewAccount.setOnClickListener(v -> {
             final Intent intent = new Intent(this, PickServerActivity.class);
             addInviteUri(intent);
             startActivity(intent);
         });
+        */
         binding.useExisting.setOnClickListener(v -> {
+            this.menu.performIdentifierAction(R.id.action_scan_qr_code, 0);
+            /*KWO: 
             final List<Account> accounts = xmppConnectionService.getAccounts();
             Intent intent = new Intent(WelcomeActivity.this, EditAccountActivity.class);
             intent.putExtra(EditAccountActivity.EXTRA_FORCE_REGISTER, false);
@@ -139,7 +145,10 @@ public class WelcomeActivity extends XmppActivity implements XmppConnectionServi
             }
             addInviteUri(intent);
             startActivity(intent);
+            */
         });
+        //KWO: hide button if no camera
+        binding.useExisting.setVisibility(Compatibility.hasFeatureCamera(this) ? Button.VISIBLE : Button.GONE);
 
     }
 
@@ -148,6 +157,7 @@ public class WelcomeActivity extends XmppActivity implements XmppConnectionServi
         getMenuInflater().inflate(R.menu.welcome_menu, menu);
         final MenuItem scan = menu.findItem(R.id.action_scan_qr_code);
         scan.setVisible(Compatibility.hasFeatureCamera(this));
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
