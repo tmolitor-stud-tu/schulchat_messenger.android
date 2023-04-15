@@ -21,6 +21,15 @@ public class PushNotificationManager extends AbstractManager {
         super(context, connection);
     }
 
+    //KWO: replacement function
+    public ListenableFuture<Registration> register(
+            final Jid appServer, final String fcmToken, final String androidId) {
+        //use androidId, which contains the push_module, as secret value
+        //the fcmToken is our node value
+        return Futures.immediateFuture(new Registration(appServer, fcmToken, androidId));
+    }
+
+    /*KWO: original function
     public ListenableFuture<Registration> register(
             final Jid appServer, final String fcmToken, final String androidId) {
         final var iq = new Iq(Iq.Type.SET);
@@ -49,6 +58,7 @@ public class PushNotificationManager extends AbstractManager {
                 },
                 MoreExecutors.directExecutor());
     }
+    */
 
     public ListenableFuture<Void> enable(final Registration registration) {
         final var iq = new Iq(Iq.Type.SET);
@@ -57,7 +67,8 @@ public class PushNotificationManager extends AbstractManager {
         enable.setNode(registration.node);
         enable.addExtension(
                 Data.of(
-                        ImmutableMap.of("secret", registration.secret),
+                        //KWO: this is named "pushModule" now
+                        ImmutableMap.of("pushModule", registration.secret),
                         Namespace.PUB_SUB_PUBLISH_OPTIONS));
         return Futures.transform(
                 connection.sendIqPacket(iq), response -> null, MoreExecutors.directExecutor());
