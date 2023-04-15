@@ -34,7 +34,44 @@ public class PushManagementService {
     private Jid getAppServer() {
         return Jid.of(mXmppConnectionService.getString(R.string.app_server));
     }
+    
+    //KWO: new function
+    private String getPushModuleIdentification() {
+        return mXmppConnectionService.getString(R.string.push_module_identification);
+    }
 
+    //KWO: replacement function
+    void registerPushTokenOnServer(final Account account) {
+        Log.i(Config.LOGTAG, "gcm_defaultSenderId: " + mXmppConnectionService.getString(R.string.gcm_defaultSenderId));
+        Log.i(Config.LOGTAG, "google_app_id: " + mXmppConnectionService.getString(R.string.google_app_id));
+        Log.i(Config.LOGTAG, "project_id: " + mXmppConnectionService.getString(R.string.project_id));
+        Log.i(Config.LOGTAG, "google_api_key: " + mXmppConnectionService.getString(R.string.google_api_key));
+        Log.i(Config.LOGTAG, "app_server: " + mXmppConnectionService.getString(R.string.app_server));
+        retrieveFcmInstanceToken(token -> {
+            Log.i(Config.LOGTAG, "fcm token: " + token);
+            final IqPacket enable = mXmppConnectionService.getIqGenerator().enablePush(getAppServer(), token, getPushModuleIdentification());
+            mXmppConnectionService.sendIqPacket(account, enable, (a, p) -> {
+                if (p.getType() == IqPacket.TYPE.RESULT) {
+                    Log.d(Config.LOGTAG, a.getJid().asBareJid() + ": successfully enabled push on server");
+                } else if (p.getType() == IqPacket.TYPE.ERROR) {
+                    Log.d(Config.LOGTAG, a.getJid().asBareJid() + ": enabling push on server failed");
+                }
+            });
+        });
+    }
+    
+    public void disablePushOnServer(final Account account) {
+        retrieveFcmInstanceToken(token -> {
+            final IqPacket disable = mXmppConnectionService.getIqGenerator().disablePush(getAppServer(), token);
+            mXmppConnectionService.sendIqPacket(account, disable, (account2, response) -> {
+                if (response.getType() == IqPacket.TYPE.ERROR) {
+                    Log.d(Config.LOGTAG, account2.getJid().asBareJid() + ": unable to disable push");
+                }
+            });
+        });
+    }
+
+    /* KWO:
     void registerPushTokenOnServer(final Account account) {
         Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": has push support");
         retrieveFcmInstanceToken(token -> {
@@ -70,6 +107,7 @@ public class PushManagementService {
             }
         });
     }
+    */
 
     private void retrieveFcmInstanceToken(final OnGcmInstanceTokenRetrieved instanceTokenRetrieved) {
         final FirebaseMessaging firebaseMessaging;
