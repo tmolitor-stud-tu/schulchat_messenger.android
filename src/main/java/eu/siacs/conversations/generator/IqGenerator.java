@@ -480,6 +480,23 @@ public class IqGenerator extends AbstractGenerator {
         return packet;
     }
 
+    //KWO: replacement function
+    public IqPacket enablePush(final Jid jid, final String node, final String pushModule) {
+        IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
+        Element enable = packet.addChild("enable", Namespace.PUSH);
+        enable.setAttribute("jid", jid.toString());
+        enable.setAttribute("node", node);
+        if (pushModule != null) {
+            Data data = new Data();
+            data.setFormType(Namespace.PUBSUB_PUBLISH_OPTIONS);
+            data.put("pushModule", pushModule);
+            data.submit();
+            enable.addChild(data);
+        }
+        return packet;
+    }
+    
+    /* KWO:
     public IqPacket enablePush(final Jid jid, final String node, final String secret) {
         IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
         Element enable = packet.addChild("enable", Namespace.PUSH);
@@ -494,6 +511,7 @@ public class IqGenerator extends AbstractGenerator {
         }
         return packet;
     }
+    */
 
     public IqPacket disablePush(final Jid jid, final String node) {
         IqPacket packet = new IqPacket(IqPacket.TYPE.SET);
