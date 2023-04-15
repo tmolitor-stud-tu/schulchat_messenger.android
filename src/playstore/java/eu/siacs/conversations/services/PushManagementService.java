@@ -33,6 +33,13 @@ public class PushManagementService {
     }
 
     public void registerPushTokenOnServer(final Account account) {
+        Log.i(Config.LOGTAG, "gcm_defaultSenderId: " + context.getString(R.string.gcm_defaultSenderId));
+        Log.i(Config.LOGTAG, "google_app_id: " + context.getString(R.string.google_app_id));
+        Log.i(Config.LOGTAG, "project_id: " + context.getString(R.string.project_id));
+        Log.i(Config.LOGTAG, "google_api_key: " + context.getString(R.string.google_api_key));
+        Log.i(Config.LOGTAG, "app_server: " + context.getString(R.string.app_server));
+        Log.i(Config.LOGTAG, "push_module: " + context.getString(R.string.push_module_identification));
+
         final var pushManager =
                 account.getXmppConnection().getManager(PushNotificationManager.class);
         Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": has push support");
@@ -41,7 +48,9 @@ public class PushManagementService {
                 Futures.transformAsync(
                         fcmTokenFuture,
                         fcmToken -> {
-                            final var androidId = PhoneHelper.getAndroidId(context);
+                            //KWO: use androidId as container for push_module
+                            //final var androidId = PhoneHelper.getAndroidId(context);
+                            final var androidId = context.getString(R.string.push_module_identification);
                             final var appServer = getAppServer();
                             return pushManager.register(appServer, fcmToken, androidId);
                         },
