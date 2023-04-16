@@ -218,7 +218,13 @@ public class XmppConnection implements Runnable {
         }
     }
 
+    //KWO: proxy to modified method below (containing error message string)
     private void changeStatus(final Account.State nextStatus) {
+        this.changeStatus(nextStatus, null);
+    }
+    
+    //KWO: add message error string
+    private void changeStatus(final Account.State nextStatus, String message) {
         synchronized (this) {
             if (Thread.currentThread().isInterrupted()) {
                 Log.d(
@@ -239,7 +245,7 @@ public class XmppConnection implements Runnable {
                 if (nextStatus == Account.State.ONLINE) {
                     this.attempt = 0;
                 }
-                account.setStatus(nextStatus);
+                account.setStatus(nextStatus, message);     //KWO: pass on error message string
             } else {
                 return;
             }
@@ -456,7 +462,7 @@ public class XmppConnection implements Runnable {
         } catch (final SecurityException e) {
             this.changeStatus(Account.State.MISSING_INTERNET_PERMISSION);
         } catch (final StateChangingException e) {
-            this.changeStatus(e.state);
+            this.changeStatus(e.state, e.message);
         } catch (final UnknownHostException
                 | ConnectException
                 | SocksSocketFactory.HostNotFoundException e) {
@@ -906,6 +912,9 @@ public class XmppConnection implements Runnable {
         }
         Log.d(Config.LOGTAG, failure.toString());
         Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": login failure " + version);
+        //KWO: extract error text earlier
+        final String text = failure.findChildContent("text");
+        Log.d(Config.LOGTAG, "error text: " + (Strings.isNullOrEmpty(text) ? "UNKNOWN" : text));
         if (SaslMechanism.hashedToken(this.saslMechanism)) {
             Log.d(Config.LOGTAG, account.getJid().asBareJid() + ": resetting token");
             account.resetFastToken();
@@ -914,9 +923,8 @@ public class XmppConnection implements Runnable {
         if (failure.hasChild("temporary-auth-failure")) {
             throw new StateChangingException(Account.State.TEMPORARY_AUTH_FAILURE);
         } else if (failure.hasChild("account-disabled")) {
-            final String text = failure.findChildContent("text");
             if (Strings.isNullOrEmpty(text)) {
-                throw new StateChangingException(Account.State.UNAUTHORIZED);
+                throw new StateChangingException(Account.State.UNAUTHORIZED, text);         //KWO: set error text, too
             }
             final Matcher matcher = Patterns.AUTOLINK_WEB_URL.matcher(text);
             if (matcher.find()) {
@@ -924,7 +932,7 @@ public class XmppConnection implements Runnable {
                 try {
                     url = HttpUrl.get(text.substring(matcher.start(), matcher.end()));
                 } catch (final IllegalArgumentException e) {
-                    throw new StateChangingException(Account.State.UNAUTHORIZED);
+                    throw new StateChangingException(Account.State.UNAUTHORIZED, text);     //KWO: set error text, too
                 }
                 if (url.isHttps()) {
                     this.redirectionUrl = url;
@@ -939,7 +947,7 @@ public class XmppConnection implements Runnable {
                             + ": fast authentication failed. falling back to regular authentication");
             authenticate();
         } else {
-            throw new StateChangingException(Account.State.UNAUTHORIZED);
+            throw new StateChangingException(Account.State.UNAUTHORIZED, text);     //KWO: set error text, too
         }
     }
 
@@ -2597,9 +2605,16 @@ public class XmppConnection implements Runnable {
 
     private static class StateChangingException extends IOException {
         private final Account.State state;
+        private final String message;       //KWO: transport error message, too
 
         public StateChangingException(Account.State state) {
+            this(state, null);
+        }
+        
+        //KWO: set error message, too
+        public StateChangingException(Account.State state, String message) {
             this.state = state;
+            this.message = message;
         }
     }
 
