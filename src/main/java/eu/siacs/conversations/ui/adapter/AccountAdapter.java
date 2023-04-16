@@ -47,11 +47,14 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
+        viewHolder.binding.accountJid.setText(account.getDisplayName());
+        /* KWO:
         if (Config.DOMAIN_LOCK != null) {
             viewHolder.binding.accountJid.setText(account.getJid().getLocal());
         } else {
             viewHolder.binding.accountJid.setText(account.getJid().asBareJid().toEscapedString());
         }
+        */
         AvatarWorkerTask.loadAvatar(account, viewHolder.binding.accountImage, R.dimen.avatar);
         viewHolder.binding.accountStatus.setText(getContext().getString(account.getStatus().getReadableId()));
         switch (account.getStatus()) {
@@ -67,6 +70,11 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                 viewHolder.binding.accountStatus.setTextColor(StyledAttributes.getColor(activity, R.attr.TextColorError));
                 break;
         }
+        
+        //KWO: hide switch
+        viewHolder.binding.tglAccountStatus.setVisibility(View.GONE);
+        
+        /* KWO:
         final boolean isDisabled = (account.getStatus() == Account.State.DISABLED);
         viewHolder.binding.tglAccountStatus.setOnCheckedChangeListener(null);
         viewHolder.binding.tglAccountStatus.setChecked(!isDisabled);
@@ -80,6 +88,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                 ((OnTglAccountState) activity).onClickTglAccountState(account, b);
             }
         });
+        */
         return view;
     }
 
