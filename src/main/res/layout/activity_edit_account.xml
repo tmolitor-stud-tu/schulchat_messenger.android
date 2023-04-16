@@ -59,7 +59,39 @@
                               android:layout_height="wrap_content"
                               android:text="Zugangsdaten erfolgreich eingelesen, bitte auf 'Weiter' tippen, um zu verbinden"
                               android:textAppearance="@style/TextAppearance.Conversations.Title" />
-                            
+
+                            <TableLayout
+                                android:id="@+id/statusmessage_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:shrinkColumns="0"
+                                android:stretchColumns="1">
+
+                                <TableRow
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    tools:ignore="UselessParent">
+
+                                    <TextView
+                                      android:id="@+id/statusmessage_text"
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_alignParentLeft="true"
+                                      android:hint="Keine Statusnachricht festgelegt"
+                                      android:textAppearance="@style/TextAppearance.Conversations.Body1" />
+
+                                    <ImageButton
+                                          android:id="@+id/action_edit_statusmessage"
+                                          android:layout_width="wrap_content"
+                                          android:layout_height="wrap_content"
+                                          android:layout_alignParentRight="true"
+                                          android:alpha="?attr/icon_alpha"
+                                          android:background="?attr/selectableItemBackgroundBorderless"
+                                          android:src="?attr/icon_edit_body"/>
+                                </TableRow>
+                            </TableLayout>
+
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/account_jid_layout"
                                 android:layout_width="match_parent"
@@ -539,7 +571,7 @@
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:padding="@dimen/image_button_padding"
                                 android:src="?attr/icon_edit_body"
-                                android:visibility="visible"/>
+                                android:visibility="gone"/>
                         </RelativeLayout>
 
                         <RelativeLayout
