@@ -38,6 +38,7 @@ import androidx.databinding.DataBindingUtil;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.base.CharMatcher;
+import com.google.common.base.Strings;
 
 import org.openintents.openpgp.util.OpenPgpUtils;
 
@@ -748,11 +749,12 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
                 } else {
                     setTitle(R.string.action_add_account);
                 }
-                //KWO: don't show username and password fields
-                this.binding.accountJid.setVisibility(View.GONE);
-                this.binding.accountPasswordLayout.setVisibility(View.GONE);
+                //KWO: automatically click next button (doesn't seem to work?)
                 this.binding.saveButton.performClick();
             }
+            //KWO: don't show username and password fields (but don't use the jid layout because we still want to display error texts)
+            this.binding.accountJid.setVisibility(View.GONE);
+            this.binding.accountPasswordLayout.setVisibility(View.GONE);
         }
         SharedPreferences preferences = getPreferences();
         mUseTor = QuickConversationsService.isConversations() && preferences.getBoolean("use_tor", getResources().getBoolean(R.bool.use_tor));
@@ -1203,6 +1205,8 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
         } else {
             final TextInputLayout errorLayout;
             if (this.mAccount.errorStatus()) {
+                errorLayout = this.binding.accountJidLayout;    //KWO: always use the same layout
+                /* KWO:
                 if (this.mAccount.getStatus() == Account.State.UNAUTHORIZED || this.mAccount.getStatus() == Account.State.DOWNGRADE_ATTACK) {
                     errorLayout = this.binding.accountPasswordLayout;
                 } else if (mShowOptions
@@ -1212,7 +1216,12 @@ public class EditAccountActivity extends OmemoActivity implements OnAccountUpdat
                 } else {
                     errorLayout = this.binding.accountJidLayout;
                 }
-                errorLayout.setError(getString(this.mAccount.getStatus().getReadableId()));
+                */
+                //KWO: add server-sent error message
+                String auxText = "";
+                if(!Strings.isNullOrEmpty(this.mAccount.getLastErrorMessage()))
+                    auxText = "\n" + this.mAccount.getLastErrorMessage();
+                errorLayout.setError(getString(this.mAccount.getStatus().getReadableId()) + auxText);
                 if (init || !accountInfoEdited()) {
                     errorLayout.requestFocus();
                 }
