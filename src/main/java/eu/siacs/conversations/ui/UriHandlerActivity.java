@@ -47,6 +47,7 @@ import java.util.regex.Pattern;
 public class UriHandlerActivity extends AppCompatActivity {
 
     public static final String ACTION_SCAN_QR_CODE = "scan_qr_code";
+    public static final String ACTION_HANDLE_REFERRER = "handle_referrer";
     private static final String EXTRA_ALLOW_PROVISIONING = "extra_allow_provisioning";
     private static final int REQUEST_SCAN_QR_CODE = 0x1234;
     private static final int REQUEST_CAMERA_PERMISSIONS_TO_SCAN = 0x6789;
@@ -56,6 +57,22 @@ public class UriHandlerActivity extends AppCompatActivity {
     private ActivityUriHandlerBinding binding;
     private Call call;
 
+    //KWO: start this activity, if proper install referrer was given
+    public static void handleReferrer(final Activity activity, Uri referrer) {
+        final Uri result = Uri.parse(Uri.decode("http://example.com?" + referrer.toString()));
+        Log.d(Config.LOGTAG, "handleReferrer(): result uri: " + result);
+        if(result.getQueryParameter("user") == null || result.getQueryParameter("domain") == null) {
+            Log.d(Config.LOGTAG, "handleReferrer(): Not handling uri, no user or domain query params given: " + referrer);
+            return;
+        }
+        
+        final Intent intent = new Intent(activity, UriHandlerActivity.class);
+        intent.setAction(UriHandlerActivity.ACTION_HANDLE_REFERRER);
+        intent.setData(referrer);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        activity.startActivity(intent);
+    }
+    
     public static void scan(final Activity activity) {
         scan(activity, false);
     }
@@ -172,7 +189,8 @@ public class UriHandlerActivity extends AppCompatActivity {
         //KWO: handle provisioning url
         final Intent intent;
         final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(true);
-        if (accounts.size() > 0) {
+
+        if (accounts.size() > 0 && "xmpp".equalsIgnoreCase(uri.getScheme())) {
             //KWO: taken from originalHandleUri() below
             final XmppUri xmppUri = new XmppUri(uri);
             if (xmppUri.isAction(XmppUri.ACTION_MESSAGE) || xmppUri.isValidJid()) {
@@ -183,9 +201,13 @@ public class UriHandlerActivity extends AppCompatActivity {
             }
         } else {
             final Uri result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
+            if(result.getQueryParameter("user") == null || result.getQueryParameter("domain") == null) {
+                Log.d(Config.LOGTAG, "Not handling uri, no user or domain query params given: " + uri);
+                return false;
+            }
             Jid jid = Jid.ofLocalAndDomain(result.getQueryParameter("user"), result.getQueryParameter("domain"));
-            Log.d("DOMAIN", result.getQueryParameter("domain").toLowerCase());
-            Log.d("MAGIC", Config.MAGIC_CREATE_DOMAIN);
+            Log.d(Config.LOGTAG, "DOMAIN" + result.getQueryParameter("domain").toLowerCase());
+            Log.d(Config.LOGTAG, "MAGIC" + Config.MAGIC_CREATE_DOMAIN);
             if (result.getQueryParameter("domain").toLowerCase().endsWith(Config.MAGIC_CREATE_DOMAIN)) {
                 if (jid.getEscapedLocal() != null && accounts.contains(jid.asBareJid())) {
                     showError(R.string.account_already_exists);
@@ -376,6 +398,12 @@ public class UriHandlerActivity extends AppCompatActivity {
                 Log.d(Config.LOGTAG, "scan. allow=" + allowProvisioning());
                 setIntent(createMainIntent());
                 startActivityForResult(new Intent(this, ScanActivity.class), REQUEST_SCAN_QR_CODE);
+                break;
+            //KWO:
+            case ACTION_HANDLE_REFERRER:
+                Log.d(Config.LOGTAG, "handle referrer: " + data.getData());
+                if(handleUri(data.getData(), true))
+                    finish();
                 break;
         }
     }

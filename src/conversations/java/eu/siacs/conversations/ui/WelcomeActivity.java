@@ -40,7 +40,7 @@ public class WelcomeActivity extends XmppActivity implements XmppConnectionServi
     private Menu menu;
     private static final int REQUEST_IMPORT_BACKUP = 0x63fb;
 
-    private XmppUri inviteUri;
+    private Uri inviteUri;
 
     public static void launch(AppCompatActivity activity) {
         Intent intent = new Intent(activity, WelcomeActivity.class);
@@ -51,14 +51,18 @@ public class WelcomeActivity extends XmppActivity implements XmppConnectionServi
 
     public void onInstallReferrerDiscovered(final Uri referrer) {
         Log.d(Config.LOGTAG, "welcome activity: on install referrer discovered " + referrer);
+        //KWO: use referrer url directly
+        UriHandlerActivity.handleReferrer(this, referrer);
+        /*KWO:
         if ("xmpp".equalsIgnoreCase(referrer.getScheme())) {
             final XmppUri xmppUri = new XmppUri(referrer);
             runOnUiThread(() -> processXmppUri(xmppUri));
         } else {
             Log.i(Config.LOGTAG, "install referrer was not an XMPP uri");
-        }
+        }*/
     }
 
+    /* KWO: not needed anymore
     private void processXmppUri(final XmppUri xmppUri) {
         if (!xmppUri.isValidJid()) {
             return;
@@ -81,6 +85,7 @@ public class WelcomeActivity extends XmppActivity implements XmppConnectionServi
         }
         this.inviteUri = xmppUri;
     }
+    */
 
     @Override
     protected void refreshUiReal() {
