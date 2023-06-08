@@ -46,6 +46,7 @@ import okhttp3.Response;
 public class UriHandlerActivity extends AppCompatActivity {
 
     public static final String ACTION_SCAN_QR_CODE = "scan_qr_code";
+    public static final String ACTION_HANDLE_REFERRER = "handle_referrer";
     private static final String EXTRA_ALLOW_PROVISIONING = "extra_allow_provisioning";
     private static final int REQUEST_SCAN_QR_CODE = 0x1234;
     private static final int REQUEST_CAMERA_PERMISSIONS_TO_SCAN = 0x6789;
@@ -55,6 +56,14 @@ public class UriHandlerActivity extends AppCompatActivity {
     private ActivityUriHandlerBinding binding;
     private Call call;
 
+    public static void handleReferrer(final Activity activity, Uri referrer) {
+        final Intent intent = new Intent(activity, UriHandlerActivity.class);
+        intent.setAction(UriHandlerActivity.ACTION_HANDLE_REFERRER);
+        intent.setData(referrer);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        activity.startActivity(intent);
+    }
+    
     public static void scan(final Activity activity) {
         scan(activity, false);
     }
@@ -361,6 +370,12 @@ public class UriHandlerActivity extends AppCompatActivity {
                 Log.d(Config.LOGTAG, "scan. allow=" + allowProvisioning());
                 setIntent(createMainIntent());
                 startActivityForResult(new Intent(this, ScanActivity.class), REQUEST_SCAN_QR_CODE);
+                break;
+            //KWO:
+            case ACTION_HANDLE_REFERRER:
+                Log.d(Config.LOGTAG, "handle referrer.");
+                if(handleUri(data.getData(), true))
+                    finish();
                 break;
         }
     }
