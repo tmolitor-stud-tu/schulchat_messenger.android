@@ -63,7 +63,70 @@ import eu.siacs.conversations.xmpp.mam.MamReference;
 
 public class DatabaseBackend extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "history";
+    //KWO: old history file
+    private class OldDatabase extends SQLiteOpenHelper {
+        private static final String DATABASE_NAME = "history";
+        private static final int DATABASE_VERSION = 51;
+        
+        private OldDatabase(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+        
+        @Override
+        public void onConfigure(SQLiteDatabase db) {
+            Log.d(Config.LOGTAG, "configuring old db");
+            db.execSQL("PRAGMA foreign_keys=ON");
+            db.rawQuery("PRAGMA secure_delete=ON", null).close();
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            Log.d(Config.LOGTAG, "creating old db");
+        }
+        
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.d(Config.LOGTAG, "upgrading old db from "+oldVersion+" to "+newVersion);
+        }
+        
+        public Account readOldAccount() {
+            SQLiteDatabase oldDB = this.getReadableDatabase();
+            final Cursor cursor = oldDB.rawQuery("select * from " + Account.TABLENAME, new String[0]);
+            while (cursor.moveToNext()) {
+                try {
+                    Account oldAccount = new Account(Jid.of(
+                            cursor.getString(cursor.getColumnIndex(Account.USERNAME)),
+                            cursor.getString(cursor.getColumnIndex(Account.SERVER)),
+                            null
+                    ), cursor.getString(cursor.getColumnIndex(Account.PASSWORD)));
+                    
+                    //drop all tables to securely delete everything
+                    oldDB.execSQL("drop table " + Account.TABLENAME);
+                    oldDB.execSQL("drop table " + Conversation.TABLENAME);
+                    oldDB.execSQL("drop table " + Message.TABLENAME);
+                    oldDB.execSQL("drop table " + ServiceDiscoveryResult.TABLENAME);
+                    oldDB.execSQL("drop table " + PresenceTemplate.TABELNAME);
+                    oldDB.execSQL("drop table " + SQLiteAxolotlStore.PREKEY_TABLENAME);
+                    oldDB.execSQL("drop table " + SQLiteAxolotlStore.SIGNED_PREKEY_TABLENAME);
+                    oldDB.execSQL("drop table " + SQLiteAxolotlStore.SESSION_TABLENAME);
+                    oldDB.execSQL("drop table " + SQLiteAxolotlStore.IDENTITIES_TABLENAME);
+                    
+                    //return account to migrate
+                    return oldAccount;
+                } catch (Exception ignored) {
+                    Log.e(Config.LOGTAG, "Failed to migrate Account from old pixart history db to new kwo history db: "+ignored);
+                    continue;
+                }
+            }
+            cursor.close();
+            return null;
+        }
+    }
+    
+    //KWO: context needed for creating OldDatabase instance in onCreate()
+    private Context context = null;
+    
+    private static final String DATABASE_NAME = "kwo_history";
     private static final int DATABASE_VERSION = 51;
 
     private static boolean requiresMessageIndexRebuild = false;
@@ -182,6 +245,7 @@ public class DatabaseBackend extends SQLiteOpenHelper {
 
     private DatabaseBackend(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context = context;     //KWO: save context for usage in onCreate()
     }
 
     private static ContentValues createFingerprintStatusContentValues(FingerprintStatus.Trust trust, boolean active) {
@@ -283,6 +347,15 @@ public class DatabaseBackend extends SQLiteOpenHelper {
         db.execSQL(CREATE_MESSAGE_INSERT_TRIGGER);
         db.execSQL(CREATE_MESSAGE_UPDATE_TRIGGER);
         db.execSQL(CREATE_MESSAGE_DELETE_TRIGGER);
+        
+        //KWO: copy over relevant info from old pixart db when first creating the kwo history db
+        try {
+            Account accountToCreate = (new OldDatabase(this.context)).readOldAccount();
+            if(accountToCreate != null)
+                db.insert(Account.TABLENAME, null, accountToCreate.getContentValues());
+        } catch (Exception ignored) {
+            Log.e(Config.LOGTAG, "Failed to migrate Account from old pixart history db to new kwo history db: "+ignored);
+        }
     }
 
     @Override
