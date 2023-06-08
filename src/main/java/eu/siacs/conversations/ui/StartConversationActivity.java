@@ -399,7 +399,8 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
             recreate();
         } else {
             if (pendingViewIntent.peek() == null) {
-                askForContactsPermissions();
+                //KWO: don't ask for phone contact permissions
+                //askForContactsPermissions();
             }
         }
         mConferenceAdapter.refreshSettings();
