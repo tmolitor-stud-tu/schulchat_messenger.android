@@ -871,6 +871,10 @@ public class StartConversationActivity extends XmppActivity
     }
 
     private boolean askForContactsPermissions() {
+        //KWO: don't ask for phone contact permissions
+        return false;
+        
+        /*KWO we don't need this anymore, unreachable statement
         if (!QuickConversationsService.isContactListIntegration(this)) {
             return false;
         }
@@ -968,6 +972,7 @@ public class StartConversationActivity extends XmppActivity
             }
         }
         return true;
+        */
     }
 
     @Override
