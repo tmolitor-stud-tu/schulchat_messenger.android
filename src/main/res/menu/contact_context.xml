@@ -4,14 +4,14 @@
     <item
         android:id="@+id/context_contact_details"
         android:title="@string/view_contact_details"/>
-    <item
+    <!--KWO <item
         android:id="@+id/context_show_qr"
-        android:title="@string/show_qr_code"/>
+        android:title="@string/show_qr_code"/>-->
     <item
         android:id="@+id/context_contact_block_unblock"
         android:title="@string/block_contact"/>
-    <item
+    <!--KWO <item
         android:id="@+id/context_delete_contact"
-        android:title="@string/delete_contact"/>
+        android:title="@string/delete_contact"/>-->
 
 </menu>
