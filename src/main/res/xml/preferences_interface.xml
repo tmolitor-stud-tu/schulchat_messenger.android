@@ -20,12 +20,14 @@
             app:fragment="eu.siacs.conversations.ui.fragment.settings.InterfaceBubblesSettingsFragment"
             app:summary="@string/pref_chat_bubbles_summary"
             app:title="@string/pref_chat_bubbles" />
+        <!--
         <SwitchPreferenceCompat
             android:defaultValue="@bool/show_dynamic_tags"
             android:icon="@drawable/ic_label_24dp"
             android:key="show_dynamic_tags"
             android:summary="@string/pref_show_dynamic_tags_summary"
             android:title="@string/pref_show_dynamic_tags" />
+        -->
 
 
     </PreferenceCategory>

@@ -98,7 +98,7 @@ public class Conversations extends Application {
 
     public static boolean isDynamicColorsDesired(final Context context) {
         final var preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getBoolean(AppSettings.DYNAMIC_COLORS, false);
+        return preferences.getBoolean(AppSettings.DYNAMIC_COLORS, context.getResources().getBoolean(R.bool.dynamic_colors));
     }
 
     private static int getDesiredNightMode(

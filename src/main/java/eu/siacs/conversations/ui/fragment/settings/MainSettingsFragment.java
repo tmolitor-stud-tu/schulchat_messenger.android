@@ -17,12 +17,14 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences_main, rootKey);
         final var about = findPreference("about");
+        /*KWO: removed settings
         final var connection = findPreference("connection");
         final var up = findPreference("up");
         if (about == null || connection == null || up == null) {
             throw new IllegalStateException(
                     "The preference resource file is missing some preferences");
         }
+        */
         about.setTitle(getString(R.string.title_activity_about_x, BuildConfig.APP_NAME));
         about.setSummary(
                 String.format(
@@ -33,10 +35,12 @@ public class MainSettingsFragment extends PreferenceFragmentCompat {
                         Strings.nullToEmpty(Build.MANUFACTURER),
                         Strings.nullToEmpty(Build.DEVICE),
                         Strings.nullToEmpty(Build.VERSION.RELEASE)));
+        /*KWO: removed settings
         if (ConnectionSettingsFragment.hideChannelDiscovery()) {
             connection.setSummary(R.string.pref_connection_summary);
         }
         up.setVisible(!Strings.isNullOrEmpty(getString(R.string.default_push_server)));
+        */
     }
 
     @Override

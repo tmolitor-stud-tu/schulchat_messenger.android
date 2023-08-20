@@ -55,6 +55,7 @@
         android:key="call_integration"
         android:summary="@string/pref_call_integration_summary"
         android:title="@string/pref_call_integration" />
+    <!--
     <ListPreference
         android:defaultValue="@integer/grace_period"
         android:entries="@array/grace_periods"
@@ -69,6 +70,7 @@
         android:key="notifications_from_strangers"
         android:summary="@string/pref_notifications_from_strangers_summary"
         android:title="@string/pref_notifications_from_strangers" />
+    -->
 
     <SwitchPreferenceCompat
         android:defaultValue="@bool/enable_foreground_service"

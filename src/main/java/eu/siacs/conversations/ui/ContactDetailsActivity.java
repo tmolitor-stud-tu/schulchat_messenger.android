@@ -286,7 +286,7 @@ public class ContactDetailsActivity extends OmemoActivity
     public void onStart() {
         super.onStart();
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        this.showDynamicTags = preferences.getBoolean(AppSettings.SHOW_DYNAMIC_TAGS, false);
+        this.showDynamicTags = preferences.getBoolean(AppSettings.SHOW_DYNAMIC_TAGS, this.getResources().getBoolean(R.bool.show_dynamic_tags));
         this.showLastSeen = preferences.getBoolean("last_activity", false);
         binding.mediaWrapper.setVisibility(
                 Compatibility.hasStoragePermission(this) ? View.VISIBLE : View.GONE);
