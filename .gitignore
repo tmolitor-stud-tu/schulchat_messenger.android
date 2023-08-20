@@ -1,3 +1,6 @@
+/local
+/src/*/res/values/api_keys.xml
+
 .classpath
 *.swp
 .settings
