@@ -1397,6 +1397,7 @@ public class StartConversationActivity extends XmppActivity
                 activity.conference_context_id = acmi.position;
                 final Bookmark bookmark = (Bookmark) activity.conferences.get(acmi.position);
                 final Conversation conversation = activity.xmppConnectionService.find(bookmark);
+                /* KWO: don't allow sharing
                 final MenuItem share = menu.findItem(R.id.context_share_uri);
                 final MenuItem delete = menu.findItem(R.id.context_delete_conference);
                 if (conversation != null) {
@@ -1405,18 +1406,22 @@ public class StartConversationActivity extends XmppActivity
                     delete.setTitle(R.string.delete_bookmark);
                 }
                 share.setVisible(conversation == null || !conversation.isPrivateAndNonAnonymous());
+                */
             } else if (mResContextMenu == R.menu.contact_context) {
                 activity.contact_context_id = acmi.position;
                 final Contact contact = (Contact) activity.contacts.get(acmi.position);
                 final MenuItem blockUnblockItem = menu.findItem(R.id.context_contact_block_unblock);
                 final MenuItem showContactDetailsItem = menu.findItem(R.id.context_contact_details);
-                final MenuItem deleteContactMenuItem = menu.findItem(R.id.context_delete_contact);
+                //KWO: don't allow contact deletion
+                //final MenuItem deleteContactMenuItem = menu.findItem(R.id.context_delete_contact);
                 if (contact.isSelf()) {
                     showContactDetailsItem.setVisible(false);
                 }
+                /*KWO: don't allow contact deletion
                 deleteContactMenuItem.setVisible(
                         contact.showInRoster()
                                 && !contact.getOption(Contact.Options.SYNCED_VIA_OTHER));
+                */
                 final XmppConnection xmpp = contact.getAccount().getXmppConnection();
                 if (xmpp != null
                         && xmpp.getManager(BlockingManager.class).hasFeature()
@@ -1442,12 +1447,15 @@ public class StartConversationActivity extends XmppActivity
                 case R.id.context_contact_details:
                     activity.openDetailsForContact();
                     break;
+                /* KWO: don't allow these
                 case R.id.context_show_qr:
                     activity.showQrForContact();
                     break;
+                */
                 case R.id.context_contact_block_unblock:
                     activity.toggleContactBlock();
                     break;
+                /* KWO: don't allow these
                 case R.id.context_delete_contact:
                     activity.deleteContact();
                     break;
@@ -1456,6 +1464,7 @@ public class StartConversationActivity extends XmppActivity
                     break;
                 case R.id.context_delete_conference:
                     activity.deleteConference();
+                */
             }
             return true;
         }

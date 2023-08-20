@@ -81,6 +81,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="8dp"
+                                android:visibility="gone"
                                 android:text="@string/add_contact" />
 
                             <Button
@@ -149,12 +150,14 @@
                                 android:id="@+id/details_send_presence"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:text="@string/send_presence_updates" />
 
                             <CheckBox
                                 android:id="@+id/details_receive_presence"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:text="@string/receive_presence_updates" />
                         </LinearLayout>
 
@@ -212,6 +215,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/keys_wrapper"
+                    android:visibility="gone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"

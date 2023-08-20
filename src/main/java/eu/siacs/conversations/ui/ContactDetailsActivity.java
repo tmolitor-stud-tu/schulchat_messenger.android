@@ -338,6 +338,7 @@ public class ContactDetailsActivity extends OmemoActivity
             case android.R.id.home:
                 finish();
                 break;
+            /* KWO: don't allow these cases
             case R.id.action_share_http:
                 shareLink(true);
                 break;
@@ -388,6 +389,7 @@ public class ContactDetailsActivity extends OmemoActivity
                     }
                 }
                 break;
+            */
             case R.id.action_block, R.id.action_unblock:
                 BlockContactDialog.show(this, contact);
                 break;
@@ -412,8 +414,10 @@ public class ContactDetailsActivity extends OmemoActivity
         AccountUtils.showHideMenuItems(menu);
         final MenuItem block = menu.findItem(R.id.action_block);
         final MenuItem unblock = menu.findItem(R.id.action_unblock);
+        /* KWO: menu items removed
         final MenuItem edit = menu.findItem(R.id.action_edit_contact);
         final MenuItem delete = menu.findItem(R.id.action_delete_contact);
+        */
         final MenuItem customNotifications = menu.findItem(R.id.action_custom_notifications);
         customNotifications.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R);
         if (contact == null) {
@@ -430,10 +434,12 @@ public class ContactDetailsActivity extends OmemoActivity
             unblock.setVisible(false);
             block.setVisible(false);
         }
+        /* KWO: roster is exclusively managed by server
         if (!contact.showInRoster()) {
             edit.setVisible(false);
             delete.setVisible(false);
         }
+        */
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -444,8 +450,13 @@ public class ContactDetailsActivity extends OmemoActivity
         invalidateOptionsMenu();
         setTitle(contact.getDisplayName());
         if (contact.showInRoster()) {
+            //KWO: never show these checkboxes (roster is exclusively managed by server)
+            binding.detailsSendPresence.setVisibility(View.GONE);
+            binding.detailsReceivePresence.setVisibility(View.GONE);
+            /*
             binding.detailsSendPresence.setVisibility(View.VISIBLE);
             binding.detailsReceivePresence.setVisibility(View.VISIBLE);
+            */
             binding.addContactButton.setVisibility(View.GONE);
             binding.detailsSendPresence.setOnCheckedChangeListener(null);
             binding.detailsReceivePresence.setOnCheckedChangeListener(null);
@@ -502,7 +513,9 @@ public class ContactDetailsActivity extends OmemoActivity
             binding.detailsSendPresence.setOnCheckedChangeListener(this.mOnSendCheckedChange);
             binding.detailsReceivePresence.setOnCheckedChangeListener(this.mOnReceiveCheckedChange);
         } else {
-            binding.addContactButton.setVisibility(View.VISIBLE);
+            //KWO: never allow adding a contact (roster is exclusively managed by server)
+            binding.addContactButton.setVisibility(View.GONE);
+            //binding.addContactButton.setVisibility(View.VISIBLE);
             binding.detailsSendPresence.setVisibility(View.GONE);
             binding.detailsReceivePresence.setVisibility(View.GONE);
             binding.statusMessage.setVisibility(View.GONE);
@@ -515,9 +528,14 @@ public class ContactDetailsActivity extends OmemoActivity
             binding.detailsLastSeen.setVisibility(View.GONE);
         }
 
+        //KWO: use display name instead of jid
+        binding.detailsContactXmppAddress.setText(contact.getDisplayName());
+        String account = contact.getAccount().getDisplayName();
+        /*
         binding.detailsContactXmppAddress.setText(
                 IrregularUnicodeDetector.style(this, contact.getAddress()));
         final String account = contact.getAccount().getJid().asBareJid().toString();
+        */
         binding.detailsAccount.setOnClickListener(this::onDetailsAccountClicked);
         binding.detailsAccount.setText(getString(R.string.using_account, account));
         AvatarWorkerTask.loadAvatar(contact, binding.detailsAvatar, R.dimen.publish_avatar_size);
@@ -614,7 +632,7 @@ public class ContactDetailsActivity extends OmemoActivity
 
         final var tagList = contact.getTags();
         final boolean hasMetaTags =
-                contact.isBlocked() || contact.getShownStatus() != Presence.Availability.OFFLINE;
+                contact.isBlocked() /*KWO: we don't want online/offline tags: || contact.getShownStatus() != Presence.Availability.OFFLINE*/;
         if ((tagList.isEmpty() && !hasMetaTags) || !this.showDynamicTags) {
             binding.tags.setVisibility(View.GONE);
         } else {
@@ -649,6 +667,7 @@ public class ContactDetailsActivity extends OmemoActivity
                 tv.setId(id);
                 viewIdBuilder.add(id);
                 binding.tags.addView(tv);
+            /*KWO: we don't want online/offline tags
             } else {
                 final Presence.Availability status = contact.getShownStatus();
                 if (status != Presence.Availability.OFFLINE) {
@@ -660,6 +679,7 @@ public class ContactDetailsActivity extends OmemoActivity
                     viewIdBuilder.add(id);
                     binding.tags.addView(tv);
                 }
+            */
             }
             binding.flowWidget.setReferencedIds(Ints.toArray(viewIdBuilder.build()));
         }
@@ -688,6 +708,11 @@ public class ContactDetailsActivity extends OmemoActivity
         startActivity(intent);
     }
 
+    //KWO: don't allow adding contacts to addressbook
+    private void onAddToAddressBookClick(final View view) {
+    }
+    
+    /*
     private void onAddToAddressBookClick(final View view) {
         if (QuickConversationsService.isContactListIntegration(this)) {
             final Uri systemAccount = contact.getSystemAccount();
@@ -714,6 +739,7 @@ public class ContactDetailsActivity extends OmemoActivity
                     .show();
         }
     }
+    */
 
     public void onBackendConnected() {
         if (accountJid != null && contactJid != null) {
