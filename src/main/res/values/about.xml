@@ -29,8 +29,11 @@
   -->
 
 <resources>
-    <string name="pref_about_message" translatable="false">
-			Conversations • the very last word in instant messaging.
+    <string name="pref_about_message" translatable="false"><b>Kurswahl online Messenger</b>
+			\n\nCopyright © 2020-%s Thilo Molitor
+			\n\nhttps://www.kurswahl-online.de/
+			\n
+			\n\nBased on the excellent app Conversations by Daniel Gultsch:
 			\n\nCopyright © 2014-2023 Daniel Gultsch
 			\n\nThis program is free software: you can redistribute it and/or modify
 			it under the terms of the GNU General Public License as published by
