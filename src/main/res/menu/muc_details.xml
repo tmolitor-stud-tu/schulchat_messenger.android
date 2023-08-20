@@ -6,6 +6,7 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:orderInCategory="15"
+        android:visible="false"
         android:title="@string/share_uri_with"
         app:showAsAction="ifRoom">
         <menu>
@@ -37,11 +38,13 @@
         android:checked="false"
         android:orderInCategory="85"
         android:title="@string/advanced_mode"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_custom_notifications"
         android:orderInCategory="89"
         android:title="@string/custom_notifications"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_accounts"

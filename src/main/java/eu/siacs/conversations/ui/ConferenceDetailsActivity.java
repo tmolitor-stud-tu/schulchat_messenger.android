@@ -476,6 +476,11 @@ public class ConferenceDetailsActivity extends XmppActivity
         menuItemSaveBookmark.setVisible(mConversation.getBookmark() == null);
         menuItemDestroyRoom.setVisible(
                 mConversation.getMucOptions().getSelf().ranks(Affiliation.OWNER));
+
+        //KWO: don't show these
+        menuItemSaveBookmark.setVisible(false);
+        menuItemDestroyRoom.setVisible(false);
+
         return true;
     }
 
@@ -593,7 +598,9 @@ public class ConferenceDetailsActivity extends XmppActivity
         }
         final MucOptions mucOptions = mConversation.getMucOptions();
         final User self = mucOptions.getSelf();
-        final String account = mConversation.getAccount().getJid().asBareJid().toString();
+        //KWO: use display name instead of jid
+        final String account = mConversation.getAccount().getDisplayName();
+        //final String account = mConversation.getAccount().getJid().asBareJid().toString();
         setTitle(
                 mucOptions.isPrivateAndNonAnonymous()
                         ? R.string.action_muc_details
@@ -609,6 +616,8 @@ public class ConferenceDetailsActivity extends XmppActivity
         } else {
             this.binding.jid.setText(mConversation.getAddress().asBareJid().toString());
         }
+        //KWO: never show muc host
+        this.binding.jid.setVisibility(View.GONE);
         AvatarWorkerTask.loadAvatar(
                 mConversation, binding.yourPhoto, R.dimen.avatar_on_details_screen_size);
         String roomName = mucOptions.getName();
@@ -691,6 +700,10 @@ public class ConferenceDetailsActivity extends XmppActivity
             this.binding.mucInfoMore.setVisibility(View.GONE);
             this.binding.mucSettings.setVisibility(View.GONE);
         }
+        //KWO: don't show these
+        this.binding.usersWrapper.setVisibility(View.GONE);
+        this.binding.mucInfoMore.setVisibility(View.GONE);
+        this.binding.mucSettings.setVisibility(View.GONE);
 
         final long mutedTill = mConversation.getLongAttribute(Conversation.ATTRIBUTE_MUTED_TILL, 0);
         if (mutedTill == Long.MAX_VALUE) {
