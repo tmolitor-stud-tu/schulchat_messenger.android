@@ -185,10 +185,12 @@ public class Contact implements ListItem, Blockable {
         for (final String group : getGroups(true)) {
             tags.add(new Tag(group, UIHelper.getColorForName(group)));
         }
+        /* KWO: don't show online status as tag
         Presence.Status status = getShownStatus();
         if (status != Presence.Status.OFFLINE) {
             tags.add(UIHelper.getTagForStatus(context, status));
         }
+        */
         if (isBlocked()) {
             tags.add(new Tag(context.getString(R.string.blocked), 0xff2e2f3b));
         }

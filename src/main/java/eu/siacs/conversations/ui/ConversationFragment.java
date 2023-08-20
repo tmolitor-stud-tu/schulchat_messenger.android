@@ -1152,7 +1152,8 @@ public class ConversationFragment extends XmppFragment
         if (conversation != null) {
             if (conversation.getMode() == Conversation.MODE_MULTI) {
                 menuContactDetails.setVisible(false);
-                menuInviteContact.setVisible(conversation.getMucOptions().canInvite());
+                //KWO: always invisible
+                //menuInviteContact.setVisible(conversation.getMucOptions().canInvite());
                 menuMucDetails.setTitle(
                         conversation.getMucOptions().isPrivateAndNonAnonymous()
                                 ? R.string.action_muc_details
@@ -1182,9 +1183,11 @@ public class ConversationFragment extends XmppFragment
                 }
                 menuContactDetails.setVisible(!this.conversation.withSelf());
                 menuMucDetails.setVisible(false);
+                /* KWO: always invisible
                 menuInviteContact.setVisible(
                         service != null
                                 && service.findConferenceServer(conversation.getAccount()) != null);
+                */
             }
             if (conversation.isMuted()) {
                 menuMute.setVisible(false);

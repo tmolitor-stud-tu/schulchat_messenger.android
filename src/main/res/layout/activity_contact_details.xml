@@ -87,6 +87,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:visibility="gone"
                                 android:text="@string/add_contact" />
 
                             <CheckBox
@@ -96,6 +97,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:text="@string/send_presence_updates"
+                                android:visibility="gone"
                                 android:textAppearance="@style/TextAppearance.Conversations.Body1" />
 
                             <CheckBox
@@ -104,6 +106,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/receive_presence_updates"
+                                android:visibility="gone"
                                 android:textAppearance="@style/TextAppearance.Conversations.Body1" />
                         </LinearLayout>
 
@@ -167,6 +170,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/keys_wrapper"
+                    android:visibility="gone"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/activity_vertical_margin"

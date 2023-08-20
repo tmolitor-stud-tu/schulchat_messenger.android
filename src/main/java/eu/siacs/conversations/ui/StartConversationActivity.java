@@ -1200,18 +1200,22 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
                 activity.conference_context_id = acmi.position;
                 final Bookmark bookmark = (Bookmark) activity.conferences.get(acmi.position);
                 final Conversation conversation = bookmark.getConversation();
+                /* KWO: don't allow sharing
                 final MenuItem share = menu.findItem(R.id.context_share_uri);
                 share.setVisible(conversation == null || !conversation.isPrivateAndNonAnonymous());
+                */
             } else if (mResContextMenu == R.menu.contact_context) {
                 activity.contact_context_id = acmi.position;
                 final Contact contact = (Contact) activity.contacts.get(acmi.position);
                 final MenuItem blockUnblockItem = menu.findItem(R.id.context_contact_block_unblock);
                 final MenuItem showContactDetailsItem = menu.findItem(R.id.context_contact_details);
-                final MenuItem deleteContactMenuItem = menu.findItem(R.id.context_delete_contact);
+                //KWO: don't allow contact deletion
+                //final MenuItem deleteContactMenuItem = menu.findItem(R.id.context_delete_contact);
                 if (contact.isSelf()) {
                     showContactDetailsItem.setVisible(false);
                 }
-                deleteContactMenuItem.setVisible(contact.showInRoster() && !contact.getOption(Contact.Options.SYNCED_VIA_OTHER));
+                //KWO: don't allow contact deletion
+                //deleteContactMenuItem.setVisible(contact.showInRoster() && !contact.getOption(Contact.Options.SYNCED_VIA_OTHER));
                 final XmppConnection xmpp = contact.getAccount().getXmppConnection();
                 if (xmpp != null && xmpp.getFeatures().blocking() && !contact.isSelf()) {
                     if (contact.isBlocked()) {
@@ -1235,12 +1239,15 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
                 case R.id.context_contact_details:
                     activity.openDetailsForContact();
                     break;
+                /* KWO: don't allow these
                 case R.id.context_show_qr:
                     activity.showQrForContact();
                     break;
+                */
                 case R.id.context_contact_block_unblock:
                     activity.toggleContactBlock();
                     break;
+                /* KWO: don't allow these
                 case R.id.context_delete_contact:
                     activity.deleteContact();
                     break;
@@ -1249,6 +1256,7 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
                     break;
                 case R.id.context_delete_conference:
                     activity.deleteConference();
+                */
             }
             return true;
         }

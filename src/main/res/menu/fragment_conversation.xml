@@ -98,6 +98,7 @@
         android:id="@+id/action_invite"
         android:orderInCategory="45"
         android:title="@string/invite_contact"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_search"

@@ -273,6 +273,7 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
             case android.R.id.home:
                 finish();
                 break;
+            /* KWO: don't allow these cases
             case R.id.action_share_http:
                 shareLink(true);
                 break;
@@ -306,6 +307,7 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
 
                 }
                 break;
+            */
             case R.id.action_block:
                 BlockContactDialog.show(this, contact);
                 break;
@@ -322,8 +324,10 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
         AccountUtils.showHideMenuItems(menu);
         MenuItem block = menu.findItem(R.id.action_block);
         MenuItem unblock = menu.findItem(R.id.action_unblock);
+        /* KWO: menu items removed
         MenuItem edit = menu.findItem(R.id.action_edit_contact);
         MenuItem delete = menu.findItem(R.id.action_delete_contact);
+        */
         if (contact == null) {
             return true;
         }
@@ -338,10 +342,12 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
             unblock.setVisible(false);
             block.setVisible(false);
         }
+        /* KWO: roster is exclusively managed by server
         if (!contact.showInRoster()) {
             edit.setVisible(false);
             delete.setVisible(false);
         }
+        */
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -352,8 +358,13 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
         invalidateOptionsMenu();
         setTitle(contact.getDisplayName());
         if (contact.showInRoster()) {
+            //KWO: never show these checkboxes (roster is exclusively managed by server)
+            binding.detailsSendPresence.setVisibility(View.GONE);
+            binding.detailsReceivePresence.setVisibility(View.GONE);
+            /*
             binding.detailsSendPresence.setVisibility(View.VISIBLE);
             binding.detailsReceivePresence.setVisibility(View.VISIBLE);
+            */
             binding.addContactButton.setVisibility(View.GONE);
             binding.detailsSendPresence.setOnCheckedChangeListener(null);
             binding.detailsReceivePresence.setOnCheckedChangeListener(null);
@@ -409,7 +420,9 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
             binding.detailsSendPresence.setOnCheckedChangeListener(this.mOnSendCheckedChange);
             binding.detailsReceivePresence.setOnCheckedChangeListener(this.mOnReceiveCheckedChange);
         } else {
-            binding.addContactButton.setVisibility(View.VISIBLE);
+            //KWO: never allow adding a contact (roster is exclusively managed by server)
+            binding.addContactButton.setVisibility(View.GONE);
+            //binding.addContactButton.setVisibility(View.VISIBLE);
             binding.detailsSendPresence.setVisibility(View.GONE);
             binding.detailsReceivePresence.setVisibility(View.GONE);
             binding.statusMessage.setVisibility(View.GONE);
@@ -429,6 +442,10 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
             }
         }
 
+        //KWO: use display name instead of jid
+        binding.detailsContactjid.setText(contact.getDisplayName());
+        String account = contact.getAccount().getDisplayName();
+        /* 
         binding.detailsContactjid.setText(IrregularUnicodeDetector.style(this, contact.getJid()));
         String account;
         if (Config.DOMAIN_LOCK != null) {
@@ -436,6 +453,7 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
         } else {
             account = contact.getAccount().getJid().asBareJid().toEscapedString();
         }
+        */
         binding.detailsAccount.setText(getString(R.string.using_account, account));
         AvatarWorkerTask.loadAvatar(contact, binding.detailsContactBadge, R.dimen.avatar_on_details_screen_size);
         binding.detailsContactBadge.setOnClickListener(this::onBadgeClick);
@@ -517,6 +535,9 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
         }
     }
 
+    //KWO: don't allow adding contacts to addressbook
+    private void onBadgeClick(View view) { }
+    /*
     private void onBadgeClick(View view) {
         final Uri systemAccount = contact.getSystemAccount();
         if (systemAccount == null) {
@@ -531,6 +552,7 @@ public class ContactDetailsActivity extends OmemoActivity implements OnAccountUp
             }
         }
     }
+    */
 
     public void onBackendConnected() {
         if (accountJid != null && contactJid != null) {
