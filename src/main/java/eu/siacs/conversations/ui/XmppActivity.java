@@ -416,6 +416,8 @@ public abstract class XmppActivity extends ActionBarActivity {
         } else {
             throw new IllegalStateException("DialogInterface was not of type AlertDialog");
         }
+        //KWO: make invisible
+        dialog.findViewById(R.id.delete_from_server).setVisibility(View.GONE);;
         final var button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         button.setOnClickListener(
                 v -> onDeleteDialogButtonClicked(alertDialog, account, postDelete));

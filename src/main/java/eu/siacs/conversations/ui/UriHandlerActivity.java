@@ -119,43 +119,51 @@ public class UriHandlerActivity extends BaseActivity {
 
     private boolean handleUri(final Uri uri, final boolean scanned) {
         //KWO: handle provisioning url
-        final Intent intent;
         final var accounts = DatabaseBackend.getInstance(this).getAccountAddresses(false);
-        if (accounts.size() > 0) {
+
+        Log.d(Config.LOGTAG, "handleUri(): checking accounts and uri scheme");
+        if (accounts.size() > 0 && "xmpp".equalsIgnoreCase(uri.getScheme())) {
             //KWO: taken from originalHandleUri() below
             final XmppUri xmppUri = new XmppUri(uri);
             if (xmppUri.isAction(XmppUri.ACTION_MESSAGE) || xmppUri.isValidJid()) {
+                Log.d(Config.LOGTAG, "handleUri(): calling original uri handler");
                 return originalHandleUri(uri, scanned);
             } else {
                 showError(R.string.invalid_jid);
                 return false;
             }
-        } else {
-            final Uri result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
-            Jid jid = Jid.ofLocalAndDomain(result.getQueryParameter("user"), result.getQueryParameter("domain"));
-            Log.d("DOMAIN", result.getQueryParameter("domain").toLowerCase());
-            Log.d("MAGIC", Config.MAGIC_CREATE_DOMAIN);
-            if (result.getQueryParameter("domain").toLowerCase().endsWith(Config.MAGIC_CREATE_DOMAIN)) {
-                if (jid.getLocal() != null && accounts.contains(jid.asBareJid())) {
-                    showError(R.string.account_already_exists);
-                    return false;
-                }
+        }
         
-                //KWO: this block is taken from ProvisioningUtils.java
-                final Intent serviceIntent = new Intent(this, XmppConnectionService.class);
-                serviceIntent.setAction(XmppConnectionService.ACTION_PROVISION_ACCOUNT);
-                serviceIntent.putExtra("address", jid.asBareJid().toString());
-                serviceIntent.putExtra("password", result.getQueryParameter("token"));
-                Compatibility.startService(this, serviceIntent);
-                intent = new Intent(this, EditAccountActivity.class);
-                intent.putExtra("jid", jid.asBareJid().toString());
-                intent.putExtra("init", true);
-            } else {
-                showError(R.string.account_registrations_are_not_supported);
+        final Uri result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
+        Log.d(Config.LOGTAG, "handleUri(): result uri: " + result);
+        if(result.getQueryParameter("user") == null || result.getQueryParameter("domain") == null) {
+            Log.d(Config.LOGTAG, "Not handling uri, no user or domain query params given: " + uri);
+            return false;
+        }
+        Jid jid = Jid.ofLocalAndDomain(result.getQueryParameter("user"), result.getQueryParameter("domain"));
+        Log.d(Config.LOGTAG, "DOMAIN" + result.getQueryParameter("domain").toLowerCase());
+        Log.d(Config.LOGTAG, "MAGIC" + Config.MAGIC_CREATE_DOMAIN);
+        if (result.getQueryParameter("domain").toLowerCase().endsWith(Config.MAGIC_CREATE_DOMAIN)) {
+            if (jid.getLocal() != null && accounts.contains(jid.asBareJid())) {
+                showError(R.string.account_already_exists);
                 return false;
             }
+    
+            //KWO: this block is taken from ProvisioningUtils.java
+            final Intent serviceIntent = new Intent(this, XmppConnectionService.class);
+            serviceIntent.setAction(XmppConnectionService.ACTION_PROVISION_ACCOUNT);
+            serviceIntent.putExtra("address", jid.asBareJid().toString());
+            serviceIntent.putExtra("password", result.getQueryParameter("token"));
+            Compatibility.startService(this, serviceIntent);
+            final Intent intent = new Intent(this, EditAccountActivity.class);
+            intent.putExtra("jid", jid.asBareJid().toString());
+            intent.putExtra("init", true);
+            this.startActivity(intent);
+        } else {
+            showError(R.string.account_registrations_are_not_supported);
+            return false;
         }
-        startActivity(intent);
+
         return true;
     }
 

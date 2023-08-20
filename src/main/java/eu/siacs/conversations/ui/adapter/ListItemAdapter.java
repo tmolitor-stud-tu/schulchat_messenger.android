@@ -31,8 +31,11 @@ import eu.siacs.conversations.utils.IrregularUnicodeDetector;
 import eu.siacs.conversations.utils.UIHelper;
 import eu.siacs.conversations.utils.XEP0392Helper;
 import eu.siacs.conversations.xmpp.Jid;
+import eu.siacs.conversations.xmpp.manager.MultiUserChatManager;
 import im.conversations.android.xmpp.model.stanza.Presence;
+import im.conversations.android.model.Bookmark;
 import java.util.List;
+import eu.siacs.conversations.persistance.DatabaseBackend;
 
 public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
@@ -136,6 +139,34 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
             }
             viewHolder.flowWidget.setReferencedIds(Ints.toArray(viewIdBuilder.build()));
         }
+        
+        //KWO: show account of contact for contacts and subjects for mucs (e.g. Created by: xxx)
+        int accountSize = DatabaseBackend.getInstance(view.getContext()).getAccountAddresses(false).size();
+        if (item instanceof Bookmark bookmark) {
+            viewHolder.jid.setVisibility(View.VISIBLE);
+            final var mucOptions =
+                bookmark.getAccount()
+                        .getXmppConnection()
+                        .getManager(MultiUserChatManager.class)
+                        .getState(bookmark.getAddress().asBareJid());
+
+            if (Bookmark.printableValue(mucOptions.getSubject())) {
+                viewHolder.jid.setText(mucOptions.getSubject());
+            //show account used only if more than one account present
+            } else if (accountSize > 1) {
+                viewHolder.jid.setText(view.getContext().getString(R.string.using_account, bookmark.getAccount().getDisplayName()));
+            } else {
+                viewHolder.jid.setVisibility(View.GONE);
+            }
+        //show account used only if more than one account present
+        } else if (item instanceof Contact contact && accountSize > 1) {
+            viewHolder.jid.setVisibility(View.VISIBLE);
+            viewHolder.jid.setText(view.getContext().getString(R.string.using_account, contact.getAccount().getDisplayName()));
+        } else {
+            viewHolder.jid.setVisibility(View.GONE);
+        }
+
+        /*KWO old jid code
         final Jid jid = item.getAddress();
         if (jid != null) {
             viewHolder.jid.setVisibility(View.VISIBLE);
@@ -143,6 +174,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         } else {
             viewHolder.jid.setVisibility(View.GONE);
         }
+        */
         viewHolder.name.setText(item.getDisplayName());
         AvatarWorkerTask.loadAvatar(item, viewHolder.avatar, R.dimen.avatar);
         return view;
