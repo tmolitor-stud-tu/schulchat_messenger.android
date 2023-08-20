@@ -680,7 +680,8 @@ public class ConversationFragment extends XmppFragment
                         return;
                     }
                     if (c.getMode() == Conversation.MODE_MULTI) {
-                        menuInviteContact.setVisible(c.getMucOptions().canInvite());
+                        //KWO: always invisible
+                        //menuInviteContact.setVisible(c.getMucOptions().canInvite());
                         menuCall.setVisible(false);
                         menuOngoingCall.setVisible(false);
                     } else {
@@ -705,11 +706,13 @@ public class ConversationFragment extends XmppFragment
                             menuVideoCall.setVisible(cameraAvailable);
                         }
                         final var connection = c.getAccount().getXmppConnection();
+                        /* KWO: always invisible
                         menuInviteContact.setVisible(
                                 !connection
                                         .getManager(MultiUserChatManager.class)
                                         .getServices()
                                         .isEmpty());
+                        */
                         menuInviteContact.setTitle(R.string.start_group_chat);
                     }
                     if (c.isMuted()) {

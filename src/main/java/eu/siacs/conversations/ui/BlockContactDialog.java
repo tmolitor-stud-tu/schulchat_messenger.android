@@ -12,6 +12,8 @@ import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.ui.util.JidDialog;
 import eu.siacs.conversations.xmpp.manager.BlockingManager;
 
+import eu.siacs.conversations.entities.Contact;
+
 public final class BlockContactDialog {
 
     public static void show(final XmppActivity xmppActivity, final Blockable blockable) {
@@ -51,7 +53,9 @@ public final class BlockContactDialog {
         final var account = blockable.getAccount();
         final var manager = account.getXmppConnection().getManager(BlockingManager.class);
 
-        final String value;
+        //KWO: removed final keyword for better code structure below
+        //final String value;
+        String value;
         @StringRes int res;
         if (blockable.getAddress().isFullJid()) {
             builder.setTitle(
@@ -59,6 +63,9 @@ public final class BlockContactDialog {
                             ? R.string.action_unblock_participant
                             : R.string.action_block_participant);
             value = blockable.getAddress().toString();
+            //KWO: show full name instead of jid
+            if(blockable instanceof Contact)
+                value = ((Contact)blockable).getDisplayName();
             res = isBlocked ? R.string.unblock_contact_text : R.string.block_contact_text;
         } else if (blockable.getAddress().getLocal() == null
                 || manager.isBlocked(blockable.getAddress().getDomain())) {
@@ -69,8 +76,10 @@ public final class BlockContactDialog {
         } else {
             if (isBlocked) {
                 builder.setTitle(R.string.action_unblock_contact);
+            /*KWO: we don't have spam
             } else if (serverMsgId != null) {
                 builder.setTitle(R.string.report_spam_and_block);
+            */
             } else {
                 final int resBlockAction =
                         blockable instanceof Conversation
@@ -80,6 +89,9 @@ public final class BlockContactDialog {
                 builder.setTitle(resBlockAction);
             }
             value = blockable.getAddress().asBareJid().toString();
+            //KWO: show full name instead of jid
+            if(blockable instanceof Contact)
+                value = ((Contact)blockable).getDisplayName();
             res = isBlocked ? R.string.unblock_contact_text : R.string.block_contact_text;
         }
         binding.text.setText(JidDialog.style(xmppActivity, res, value));
