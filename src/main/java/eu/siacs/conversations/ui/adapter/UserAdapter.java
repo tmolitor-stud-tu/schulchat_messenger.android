@@ -95,6 +95,10 @@ public class UserAdapter extends ListAdapter<MucOptions.User, UserAdapter.ViewHo
             viewHolder.binding.contactDisplayName.setText(name == null ? "" : name);
             viewHolder.binding.contactJid.setText(ConferenceDetailsActivity.getStatus(viewHolder.binding.getRoot().getContext(), user, advancedMode));
         }
+        
+        //KWO: hide muc participant type/status
+        viewHolder.binding.contactJid.setVisibility(View.GONE);
+        
         if (advancedMode && user.getPgpKeyId() != 0) {
             viewHolder.binding.key.setVisibility(View.VISIBLE);
             viewHolder.binding.key.setOnClickListener(v -> {
