@@ -71,10 +71,6 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                 break;
         }
         
-        //KWO: hide switch
-        viewHolder.binding.tglAccountStatus.setVisibility(View.GONE);
-        
-        /* KWO:
         final boolean isDisabled = (account.getStatus() == Account.State.DISABLED);
         viewHolder.binding.tglAccountStatus.setOnCheckedChangeListener(null);
         viewHolder.binding.tglAccountStatus.setChecked(!isDisabled);
@@ -88,7 +84,6 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                 ((OnTglAccountState) activity).onClickTglAccountState(account, b);
             }
         });
-        */
         return view;
     }
 

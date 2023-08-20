@@ -89,12 +89,14 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
 			viewHolder.jid.setVisibility(View.GONE);
 		}
 
-		//KWO: don't show jids of contacts and show subjects ob mucs (e.g. Created by: xxx)
+		//KWO: show account of contact for contacts and subjects for mucs (e.g. Created by: xxx)
 		if(item instanceof Bookmark && ((Bookmark)item).getConversation() != null && Bookmark.printableValue(((Bookmark)item).getConversation().getMucOptions().getSubject())) {
 			viewHolder.jid.setVisibility(View.VISIBLE);
-			viewHolder.jid.setText(((Bookmark)item).getConversation().getMucOptions().getSubject());
-		} else
-			viewHolder.jid.setVisibility(View.GONE);
+			viewHolder.jid.setText(view.getContext().getString(R.string.using_account, ((Bookmark)item).getAccount().getDisplayName()) + "  " + ((Bookmark)item).getConversation().getMucOptions().getSubject());
+		} else if(item instanceof Contact) {
+			viewHolder.jid.setVisibility(View.VISIBLE);
+            viewHolder.jid.setText(view.getContext().getString(R.string.using_account, ((Contact)item).getAccount().getDisplayName()));
+		}
 
 		viewHolder.name.setText(item.getDisplayName());
 		AvatarWorkerTask.loadAvatar(item, viewHolder.avatar, R.dimen.avatar);
