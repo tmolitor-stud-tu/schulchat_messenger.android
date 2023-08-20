@@ -126,6 +126,10 @@ public class UserAdapter extends ListAdapter<MucOptions.User, UserAdapter.ViewHo
         } else {
             viewHolder.binding.contactJid.setVisibility(View.GONE);
         }
+
+        //KWO: hide muc participant type/status
+        viewHolder.binding.contactJid.setVisibility(View.GONE);
+
         if (user.getMucOptions().isPrivateAndNonAnonymous() && user.getPgpKeyId() != 0) {
             viewHolder.binding.key.setVisibility(View.VISIBLE);
             viewHolder.binding.key.setOnClickListener(
