@@ -92,6 +92,9 @@ public class NotificationsSettingsFragment extends XmppPreferenceFragment {
             fullscreenNotification.setVisible(false);
         }
         callIntegration.setVisible(CallIntegration.selfManagedAvailable(requireContext()));
+        
+        //KWO: always remove this
+        foregroundService.setVisible(false);
     }
 
     @Override
