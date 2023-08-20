@@ -128,7 +128,6 @@ android {
     flavorDimensions("mode", "distribution")
 
     productFlavors {
-
         quicksy {
             dimension "mode"
             applicationId = "im.quicksy.client"
@@ -141,6 +140,21 @@ android {
 
         conversations {
             dimension "mode"
+			
+			applicationId = app_id
+			versionName = version_name
+			versionCode = version_code as int
+			resValue "string", "applicationId", applicationId
+			resValue "string", "app_name", appName
+			resValue "string", "app_server", app_server
+			resValue "string", "push_module_identification", push_module_identification
+			resValue "string", "gcm_defaultSenderId", gcm_defaultSenderId
+			resValue "string", "google_app_id", google_app_id
+			resValue "string", "project_id", project_id
+			resValue "string", "google_api_key", fcm_api_key
+			buildConfigField "String", "APP_NAME", "\"$appName\""
+			buildConfigField("String", "APP_SECRET", '"' + mAppSecret + '"')
+			buildConfigField("String", "LOGTAG", '"KWO_Messenger"')
         }
 
         playstore {
@@ -234,6 +248,7 @@ android {
         disable 'MissingTranslation', 'InvalidPackage', 'AppCompatResource', 'ExtraTranslation'
     }
 
+    /*
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
             def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(com.android.build.OutputFile.ABI))
@@ -245,4 +260,5 @@ android {
         }
 
     }
+    */
 }
