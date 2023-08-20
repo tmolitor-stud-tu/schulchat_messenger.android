@@ -34,6 +34,7 @@
 
         </androidx.viewpager.widget.ViewPager>
 
+        <!--KWO
         <com.leinardi.android.speeddial.SpeedDialOverlayLayout
             android:id="@+id/overlay"
             android:layout_width="match_parent"
@@ -55,5 +56,6 @@
             app:sdMainFabOpenedBackgroundColor="?colorPrimaryDark"
             app:sdOverlayLayout="@id/overlay"
             app:sdUseReverseAnimationOnClose="true" />
+        -->
     </RelativeLayout>
 </layout>

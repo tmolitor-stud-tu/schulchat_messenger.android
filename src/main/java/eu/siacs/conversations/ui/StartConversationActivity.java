@@ -130,9 +130,11 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
                     imm.showSoftInput(mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
                 }
             });
+            /* KWO: no speed dial
             if (binding.speedDial.isOpen()) {
                 binding.speedDial.close();
             }
+            */
             return true;
         }
 
@@ -276,7 +278,9 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
         setSupportActionBar(binding.toolbar);
         configureActionBar(getSupportActionBar());
 
+        /* KWO: no speed dial
         inflateFab(binding.speedDial, R.menu.start_conversation_fab_submenu);
+        */
         binding.tabLayout.setupWithViewPager(binding.startConversationViewPager);
         binding.startConversationViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -318,6 +322,7 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
         }
         mRequestedContactsPermission.set(savedInstanceState != null && savedInstanceState.getBoolean("requested_contacts_permission", false));
         mOpenedFab.set(savedInstanceState != null && savedInstanceState.getBoolean("opened_fab", false));
+        /* KWO: no speed dial
         binding.speedDial.setOnActionSelectedListener(actionItem -> {
             final String searchString = mSearchEditText != null ? mSearchEditText.getText().toString() : null;
             final String prefilled;
@@ -349,6 +354,7 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
             }
             return false;
         });
+        */
     }
 
     private void inflateFab(final SpeedDialView speedDialView, final @MenuRes int menuRes) {
@@ -688,6 +694,11 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
             menuHideOffline.setVisible(true);
             menuHideOffline.setChecked(this.mHideOfflineContacts);
         }
+
+        //KWO: always hide these menu items
+        menuHideOffline.setVisible(false);
+        qrCodeScanMenuItem.setVisible(false);
+
         mMenuSearchView = menu.findItem(R.id.action_search);
         mMenuSearchView.setOnActionExpandListener(mOnActionExpandListener);
         View mSearchView = mMenuSearchView.getActionView();
@@ -930,9 +941,11 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
         if (QuickConversationsService.isQuicksy()) {
             setRefreshing(xmppConnectionService.getQuickConversationsService().isSynchronizing());
         }
+        /* KWO: no speed dial
         if (QuickConversationsService.isConversations() && AccountUtils.hasEnabledAccounts(xmppConnectionService) && this.contacts.size() == 0 && this.conferences.size() == 0 && mOpenedFab.compareAndSet(false, true)) {
             binding.speedDial.open();
         }
+        */
     }
 
     protected boolean processViewIntent(@NonNull Intent intent) {
@@ -1088,10 +1101,12 @@ public class StartConversationActivity extends XmppActivity implements XmppConne
 
     @Override
     public void onBackPressed() {
+        /* KWO: no speed dial
         if (binding.speedDial.isOpen()) {
             binding.speedDial.close();
             return;
         }
+        */
         navigateBack();
     }
 

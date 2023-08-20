@@ -206,7 +206,7 @@ public class Bookmark extends Element implements ListItem {
 		}
 		needle = needle.toLowerCase(Locale.US);
 		final Jid jid = getJid();
-		return (jid != null && jid.toString().contains(needle)) ||
+		return /* KWO: don't match jid: (jid != null && jid.toString().contains(needle)) ||*/
 			getDisplayName().toLowerCase(Locale.US).contains(needle) ||
 			matchInTag(context, needle);
 	}
