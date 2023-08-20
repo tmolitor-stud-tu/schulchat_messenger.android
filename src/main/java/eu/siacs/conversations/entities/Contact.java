@@ -211,7 +211,7 @@ public class Contact implements ListItem, Blockable {
             }
             return true;
         } else {
-            return jid.toString().contains(needle) ||
+            return /* KWO: don't match jid: jid.toString().contains(needle) ||*/
                     getDisplayName().toLowerCase(Locale.US).contains(needle) ||
                     matchInTag(context, needle);
         }
