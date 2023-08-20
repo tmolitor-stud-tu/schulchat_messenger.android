@@ -35,12 +35,15 @@ import eu.siacs.conversations.services.AvatarService;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.UIHelper;
 import eu.siacs.conversations.utils.XmppUri;
+import eu.siacs.conversations.utils.PhoneHelper;
 import eu.siacs.conversations.xmpp.Jid;
 import eu.siacs.conversations.xmpp.XmppConnection;
 import eu.siacs.conversations.xmpp.jingle.RtpCapability;
 
 public class Account extends AbstractEntity implements AvatarService.Avatarable {
 
+    public XmppConnectionService context;      //KWO: save context for SASL mechanisms
+    
     public static final String TABLENAME = "accounts";
 
     public static final String USERNAME = "username";
@@ -459,7 +462,8 @@ public class Account extends AbstractEntity implements AvatarService.Avatarable 
     }
 
     public void setResource(final String resource) {
-        this.jid = this.jid.withResource(resource);
+        //KWO: ignore resource argument
+        this.jid = this.jid.withResource(PhoneHelper.getAndroidId(this.context));
     }
 
     public Jid getJid() {
@@ -535,6 +539,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatarable 
     }
 
     public void initAccountServices(final XmppConnectionService context) {
+        this.context = context;     //KWO: save context for SASL mechanisms
         this.axolotlService = new AxolotlService(this, context);
         this.pgpDecryptionService = new PgpDecryptionService(context);
         if (xmppConnection != null) {
