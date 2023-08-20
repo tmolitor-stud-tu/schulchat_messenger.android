@@ -23,8 +23,10 @@ import eu.siacs.conversations.crypto.sasl.HashedTokenSha512;
 import eu.siacs.conversations.crypto.sasl.SaslMechanism;
 import eu.siacs.conversations.http.ServiceOutageStatus;
 import eu.siacs.conversations.services.AvatarService;
+import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.Resolver;
 import eu.siacs.conversations.utils.UIHelper;
+import eu.siacs.conversations.utils.PhoneHelper;
 import eu.siacs.conversations.xmpp.Jid;
 import eu.siacs.conversations.xmpp.XmppConnection;
 import eu.siacs.conversations.xmpp.jingle.RtpCapability;
@@ -182,6 +184,10 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
                 cursor.getString(cursor.getColumnIndexOrThrow(PINNED_CHANNEL_BINDING)),
                 cursor.getString(cursor.getColumnIndexOrThrow(FAST_MECHANISM)),
                 cursor.getString(cursor.getColumnIndexOrThrow(FAST_TOKEN)));
+    }
+    
+    public XmppConnectionService getContext() {
+        return this.xmppConnection.getContext();
     }
 
     // TODO remove this method and call HttpUploadManager directly i
@@ -442,7 +448,8 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     }
 
     public void setResource(final String resource) {
-        this.jid = this.jid.withResource(resource);
+        //KWO: ignore resource argument
+        this.jid = this.jid.withResource(PhoneHelper.getAndroidId(this.xmppConnection.getContext()));
     }
 
     public Jid getJid() {

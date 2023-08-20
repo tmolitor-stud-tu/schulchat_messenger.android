@@ -239,6 +239,10 @@ public class XmppConnection implements Runnable {
         this.setAxolotlService(new AxolotlService(account, service));
         this.pgpDecryptionService = new PgpDecryptionService(service);
     }
+    
+    public XmppConnectionService getContext() {
+        return this.mXmppConnectionService;
+    }
 
     private static void fixResource(final Context context, final Account account) {
         String resource = account.getResource();
