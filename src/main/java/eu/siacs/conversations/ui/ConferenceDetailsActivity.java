@@ -361,6 +361,12 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
             menuItemSaveBookmark.setVisible(true);
         }
         menuItemDestroyRoom.setVisible(mConversation.getMucOptions().getSelf().getAffiliation().ranks(MucOptions.Affiliation.OWNER));
+
+        //KWO: don't show these
+        menuItemDeleteBookmark.setVisible(false);
+        menuItemSaveBookmark.setVisible(false);
+        menuItemDestroyRoom.setVisible(false);
+
         return true;
     }
 
@@ -451,12 +457,18 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
         }
         final MucOptions mucOptions = mConversation.getMucOptions();
         final User self = mucOptions.getSelf();
+
+        //KWO: use display name instead of jid
+        String account = mConversation.getAccount().getDisplayName();
+        /*
         String account;
         if (Config.DOMAIN_LOCK != null) {
             account = mConversation.getAccount().getJid().getEscapedLocal();
         } else {
             account = mConversation.getAccount().getJid().asBareJid().toEscapedString();
         }
+        */
+
         setTitle(mucOptions.isPrivateAndNonAnonymous() ? R.string.action_muc_details : R.string.channel_details);
         this.binding.editMucNameButton.setVisibility((self.getAffiliation().ranks(MucOptions.Affiliation.OWNER) || mucOptions.canChangeSubject()) ? View.VISIBLE : View.GONE);
         this.binding.detailsAccount.setText(getString(R.string.using_account, account));
@@ -465,6 +477,8 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
         } else {
             this.binding.jid.setText(mConversation.getJid().asBareJid().toEscapedString());
         }
+        //KWO: never show muc host
+        this.binding.jid.setVisibility(View.GONE);
         AvatarWorkerTask.loadAvatar(mConversation, binding.yourPhoto, R.dimen.avatar_on_details_screen_size);
         String roomName = mucOptions.getName();
         String subject = mucOptions.getSubject();
@@ -523,6 +537,10 @@ public class ConferenceDetailsActivity extends XmppActivity implements OnConvers
             this.binding.mucInfoMore.setVisibility(View.GONE);
             this.binding.mucSettings.setVisibility(View.GONE);
         }
+        //KWO: don't show these
+        this.binding.usersWrapper.setVisibility(View.GONE);
+        this.binding.mucInfoMore.setVisibility(View.GONE);
+        this.binding.mucSettings.setVisibility(View.GONE);
 
         int ic_notifications = getThemeResource(R.attr.icon_notifications, R.drawable.ic_notifications_black_24dp);
         int ic_notifications_off = getThemeResource(R.attr.icon_notifications_off, R.drawable.ic_notifications_off_black_24dp);
