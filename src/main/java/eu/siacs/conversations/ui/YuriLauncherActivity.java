@@ -59,14 +59,17 @@ public class YuriLauncherActivity extends AppCompatActivity {
         new Handler(Looper.getMainLooper()).post(this::finish);
     }
 
-    //KWO: a provisioning url carries user/domain/token and is only honoured while no account
-    //exists yet; with an account present we fall through to the regular xmpp uri handling.
+    //KWO: a provisioning url carries user/domain/token. With accounts already present an
+    //xmpp: uri keeps going to the regular handler, but any other scheme is still treated as a
+    //provisioning link so that further accounts can be added.
     private boolean handleProvisioningUri(final Uri data) {
         final var accounts = DatabaseBackend.getInstance(this).getAccountAddresses();
-        if (!accounts.isEmpty()) {
+        Log.d(Config.LOGTAG, "handleProvisioningUri(): checking accounts and uri scheme");
+        if (!accounts.isEmpty() && "xmpp".equalsIgnoreCase(data.getScheme())) {
             return false;
         }
         final Uri result = Uri.parse(Uri.decode("http://example.com?" + data.toString()));
+        Log.d(Config.LOGTAG, "handleProvisioningUri(): result uri: " + result);
         final String user = result.getQueryParameter("user");
         final String domain = result.getQueryParameter("domain");
         if (user == null || domain == null) {

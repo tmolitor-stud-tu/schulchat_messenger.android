@@ -205,7 +205,9 @@ public class ManageAccountActivity extends XmppActivity
         }
         switch (item.getItemId()) {
             case R.id.action_add_account:
-                startActivity(new Intent(this, EditAccountActivity.class));
+                //KWO: always use welcome activity for account creation
+                startActivity(new Intent(this, WelcomeActivity.class));
+                //startActivity(new Intent(this, EditAccountActivity.class));
                 break;
             case R.id.action_import_backup:
                 if (hasStoragePermission(REQUEST_IMPORT_BACKUP)) {
