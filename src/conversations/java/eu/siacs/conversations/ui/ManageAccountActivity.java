@@ -3,6 +3,11 @@ package eu.siacs.conversations.ui;
 import static eu.siacs.conversations.utils.PermissionUtils.allGranted;
 import static eu.siacs.conversations.utils.PermissionUtils.writeGranted;
 
+//KWO: add logging
+import android.util.Log;
+//KWO: needed for isSomeAccountOnStableDemoDomain
+import eu.siacs.conversations.BuildConfig;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
@@ -42,6 +47,8 @@ public class ManageAccountActivity extends XmppActivity
                 XmppConnectionService.OnAccountCreated,
                 AccountAdapter.OnTglAccountState {
 
+    private static final String LOGTAG = "KWO_ACCOUNT";
+    
     private final String STATE_SELECTED_ACCOUNT = "selected_account";
 
     private static final int REQUEST_IMPORT_BACKUP = 0x63fb;
@@ -153,7 +160,7 @@ public class ManageAccountActivity extends XmppActivity
         MenuItem enableAll = menu.findItem(R.id.action_enable_all);
         MenuItem addAccount = menu.findItem(R.id.action_add_account);
         MenuItem addAccountWithCertificate = menu.findItem(R.id.action_add_account_with_cert);
-
+        
         if (Config.X509_VERIFICATION) {
             addAccount.setVisible(false);
             addAccountWithCertificate.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -166,6 +173,15 @@ public class ManageAccountActivity extends XmppActivity
         if (!accountsLeftToDisable()) {
             disableAll.setVisible(false);
         }
+        
+        //KWO: prevent multi-account usage if we are a stable build and one of our accounts is on our stable demo domain
+        Boolean demoAccount = isSomeAccountOnStableDemoDomain();
+        Log.d(LOGTAG, "isSomeAccountOnStableDemoDomain = " + demoAccount);
+        Log.d(LOGTAG, "BuildConfig.IS_BETA = " + BuildConfig.IS_BETA);
+        if (!BuildConfig.IS_BETA && demoAccount) {
+            addAccount.setVisible(false);
+        }
+        
         return true;
     }
 
@@ -305,6 +321,19 @@ public class ManageAccountActivity extends XmppActivity
         synchronized (this.accountList) {
             for (Account account : this.accountList) {
                 if (!account.isEnabled()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    
+    //KWO: detect if we are using the stable demo domain
+    private boolean isSomeAccountOnStableDemoDomain() {
+        synchronized (this.accountList) {
+            for (Account account : this.accountList) {
+                Log.d(LOGTAG, "comparing " + account.getDomain().toString() + " ?= " + BuildConfig.STABLE_DEMO_DOMAIN);
+                if (BuildConfig.STABLE_DEMO_DOMAIN.equalsIgnoreCase(account.getDomain().toString())) {
                     return true;
                 }
             }
