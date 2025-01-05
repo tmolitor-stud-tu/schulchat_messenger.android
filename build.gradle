@@ -161,9 +161,12 @@ android {
 			resValue "string", "google_app_id", google_app_id
 			resValue "string", "project_id", project_id
 			resValue "string", "google_api_key", fcm_api_key
+			buildConfigField "Boolean", "IS_BETA", "$isBeta"
+			buildConfigField "String", "STABLE_DEMO_DOMAIN", "\"$stable_demo_domain\""
+			buildConfigField "String", "BETA_DEMO_DOMAIN", "\"$beta_demo_domain\""
+			buildConfigField "String", "LOGTAG", '"KWO_Messenger"'
 			buildConfigField "String", "APP_NAME", "\"$appName\""
-			buildConfigField("String", "APP_SECRET", '"' + mAppSecret + '"')
-			buildConfigField("String", "LOGTAG", '"KWO_Messenger"')
+			buildConfigField "String", "APP_SECRET", "\"$mAppSecret\""
         }
 
         playstore {

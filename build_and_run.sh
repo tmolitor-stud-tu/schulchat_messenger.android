@@ -26,6 +26,7 @@ export ORG_GRADLE_PROJECT_google_app_id="$(python3 load_value.py $app "mobilesdk
 export ORG_GRADLE_PROJECT_project_id="$(python3 load_value.py $app "project_id")"
 export ORG_GRADLE_PROJECT_fcm_api_key="$(python3 load_value.py $app "fcm_api_key")"
 
+echo "isBeta = '$ORG_GRADLE_PROJECT_isBeta'"
 echo "appName = '$ORG_GRADLE_PROJECT_appName'"
 echo "app_id = '$ORG_GRADLE_PROJECT_app_id'"
 echo "mAppSecret = '$ORG_GRADLE_PROJECT_mAppSecret'"
