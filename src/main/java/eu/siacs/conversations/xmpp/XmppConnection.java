@@ -266,10 +266,14 @@ public class XmppConnection implements Runnable {
     }
 
     private void changeState(final Account.State nextStatus) {
-        this.changeState(nextStatus, true);
+        this.changeState(nextStatus, null, true);
     }
 
     private void changeState(final Account.State nextStatus, final boolean skipOnInterrupt) {
+        this.changeState(nextStatus, null, skipOnInterrupt);
+    }
+
+    private void changeState(final Account.State nextStatus, final String errorMessage, final boolean skipOnInterrupt) {
         synchronized (this) {
             if (skipOnInterrupt && Thread.currentThread().isInterrupted()) {
                 Log.d(
@@ -291,7 +295,7 @@ public class XmppConnection implements Runnable {
                 if (nextStatus == Account.State.ONLINE) {
                     this.attempt = 0;
                 }
-                account.setStatus(nextStatus);
+                account.setStatus(nextStatus, errorMessage);
             } else {
                 return;
             }
@@ -560,7 +564,7 @@ public class XmppConnection implements Runnable {
                         account.getJid().asBareJid() + ": incompatible implementations",
                         e);
             }
-            this.changeState(e.state);
+            this.changeState(e.state, e.getMessage(), true);
         } catch (final UnknownHostException
                 | ConnectException
                 | SocksSocketFactory.HostNotFoundException e) {
@@ -1080,7 +1084,7 @@ public class XmppConnection implements Runnable {
             throw new StateChangingException(Account.State.TEMPORARY_AUTH_FAILURE);
         } else if (errorCondition instanceof SaslError.AccountDisabled) {
             if (Strings.isNullOrEmpty(text)) {
-                throw new StateChangingException(Account.State.UNAUTHORIZED);
+                throw new StateChangingException(Account.State.UNAUTHORIZED, text);
             }
             final Matcher matcher = Patterns.URI_HTTP.matcher(text);
             if (matcher.find()) {
@@ -1088,7 +1092,7 @@ public class XmppConnection implements Runnable {
                 try {
                     url = HttpUrl.get(text.substring(matcher.start(), matcher.end()));
                 } catch (final IllegalArgumentException e) {
-                    throw new StateChangingException(Account.State.UNAUTHORIZED);
+                    throw new StateChangingException(Account.State.UNAUTHORIZED, text);
                 }
                 if (url.isHttps()) {
                     this.redirectionUrl = url;
@@ -1105,7 +1109,7 @@ public class XmppConnection implements Runnable {
             this.loginInfo = null;
             authenticate();
         } else {
-            throw new StateChangingException(Account.State.UNAUTHORIZED);
+            throw new StateChangingException(Account.State.UNAUTHORIZED, text);
         }
     }
 
@@ -3031,6 +3035,7 @@ public class XmppConnection implements Runnable {
             this.state = state;
         }
 
+        //KWO: the message is carried by the IOException itself (super), read via getMessage()
         public StateChangingException(final Account.State state, final String message) {
             super(message);
             this.state = state;

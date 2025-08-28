@@ -1921,8 +1921,13 @@ public class NotificationService {
         } else if (errors.size() == 1) {
             mBuilder.setContentTitle(
                     mXmppConnectionService.getString(R.string.problem_connecting_to_account));
-            mBuilder.setContentText(
-                    Iterables.getOnlyElement(errors).getJid().asBareJid().toString());
+            //KWO: anzeigen der konkreten fehlermeldung in der notification
+            final String lastErrorMessage =
+                    Iterables.getOnlyElement(errors).getLastErrorMessage();
+            if (lastErrorMessage != null)
+                mBuilder.setContentText(lastErrorMessage);
+            else
+                mBuilder.setContentText(mXmppConnectionService.getString(R.string.touch_to_fix));
         } else {
             mBuilder.setContentTitle(
                     mXmppConnectionService.getString(R.string.problem_connecting_to_accounts));

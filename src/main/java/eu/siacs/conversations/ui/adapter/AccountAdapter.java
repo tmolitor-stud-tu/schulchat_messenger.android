@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import com.google.android.material.color.MaterialColors;
+import com.google.common.base.Strings;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ItemAccountBinding;
 import eu.siacs.conversations.entities.Account;
@@ -65,7 +66,11 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                         R.string.account_status_service_outage_known);
             }
         } else {
-            viewHolder.binding.accountStatus.setText(status.getReadableId());
+            //KWO: add server-sent error message
+            String auxText = "";
+            if(!Strings.isNullOrEmpty(account.getLastErrorMessage()))
+                auxText = "\n" + account.getLastErrorMessage();
+            viewHolder.binding.accountStatus.setText(parent.getContext().getString(status.getReadableId()) + auxText);
         }
         switch (status) {
             case ONLINE:

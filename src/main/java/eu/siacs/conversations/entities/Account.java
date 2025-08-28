@@ -78,6 +78,7 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
     protected int options = 0;
     protected State status = State.OFFLINE;
     private State lastErrorStatus = State.OFFLINE;
+    private String lastErrorMessage = null; //KWO: save server-sent error message for later display
     protected String resource;
     protected String avatar;
     protected String hostname = null;
@@ -337,12 +338,23 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         return this.lastErrorStatus;
     }
 
+    //KWO: return server-sent error message for display
+    public String getLastErrorMessage() {
+        return this.lastErrorMessage;
+    }
+
     public void setStatus(@org.jspecify.annotations.NonNull final State status) {
+        this.setStatus(status, null);
+    }
+
+    //KWO: save server-sent error message for later display
+    public void setStatus(final State status, final String message) {
         this.status = status;
         if (status.isError
                 || (Arrays.asList(State.ONLINE, State.AIRPLANE_MODE, State.NO_INTERNET)
                         .contains(status))) {
             this.lastErrorStatus = status;
+            this.lastErrorMessage = message;
         }
     }
 
