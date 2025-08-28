@@ -34,6 +34,10 @@ import eu.siacs.conversations.xmpp.Jid;
 import im.conversations.android.xmpp.model.stanza.Presence;
 import java.util.List;
 
+//KWO: needed for "jid" handling (don't display jid for contacts, display bookmark name for bookmarks)
+import eu.siacs.conversations.entities.Bookmark;
+import eu.siacs.conversations.entities.Contact;
+
 public class ListItemAdapter extends ArrayAdapter<ListItem> {
 
     protected XmppActivity activity;
@@ -143,6 +147,14 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         } else {
             viewHolder.jid.setVisibility(View.GONE);
         }
+
+        //KWO: don't show jids of contacts and show subjects ob mucs (e.g. Created by: xxx)
+		if(item instanceof Bookmark && ((Bookmark)item).getConversation() != null && Bookmark.printableValue(((Bookmark)item).getConversation().getMucOptions().getSubject())) {
+			viewHolder.jid.setVisibility(View.VISIBLE);
+			viewHolder.jid.setText(((Bookmark)item).getConversation().getMucOptions().getSubject());
+		} else
+			viewHolder.jid.setVisibility(View.GONE);
+
         viewHolder.name.setText(item.getDisplayName());
         AvatarWorkerTask.loadAvatar(item, viewHolder.avatar, R.dimen.avatar);
         return view;
