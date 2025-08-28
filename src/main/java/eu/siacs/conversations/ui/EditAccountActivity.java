@@ -863,6 +863,8 @@ public class EditAccountActivity extends OmemoActivity
                 this.binding.accountRegisterNew.setVisibility(View.GONE);
                 setTitle(getString(R.string.account_details));
                 configureActionBar(getSupportActionBar(), !openedFromNotification);
+                //KWO: kwo login text verstecken
+                this.binding.loginText.setVisibility(View.GONE);
             } else {
                 this.binding.avater.setVisibility(View.GONE);
                 configureActionBar(
@@ -876,6 +878,10 @@ public class EditAccountActivity extends OmemoActivity
                 } else {
                     setTitle(R.string.action_add_account);
                 }
+                //KWO: don't show username and password fields
+                this.binding.accountJid.setVisibility(View.GONE);
+                this.binding.accountPasswordLayout.setVisibility(View.GONE);
+                this.binding.saveButton.performClick();
             }
         }
         SharedPreferences preferences = getPreferences();

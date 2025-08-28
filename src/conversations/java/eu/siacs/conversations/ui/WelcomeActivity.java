@@ -14,6 +14,7 @@ import android.security.KeyChainAliasCallback;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,7 @@ import java.util.List;
 public class WelcomeActivity extends XmppActivity
         implements XmppConnectionService.OnAccountCreated, KeyChainAliasCallback {
 
+    private Menu menu;
     private static final int REQUEST_IMPORT_BACKUP = 0x63fb;
 
     private XmppUri inviteUri;
@@ -117,26 +119,29 @@ public class WelcomeActivity extends XmppActivity
         setSupportActionBar(binding.toolbar);
         configureActionBar(getSupportActionBar(), false);
         setTitle(null);
-        binding.registerNewAccount.setOnClickListener(
-                v -> {
-                    final Intent intent = new Intent(this, PickServerActivity.class);
-                    addInviteUri(intent);
-                    startActivity(intent);
-                });
+        // binding.registerNewAccount.setOnClickListener(
+        //         v -> {
+        //             final Intent intent = new Intent(this, PickServerActivity.class);
+        //             addInviteUri(intent);
+        //             startActivity(intent);
+        //         });
         binding.useExisting.setOnClickListener(
                 v -> {
-                    final List<Account> accounts = xmppConnectionService.getAccounts();
-                    Intent intent = new Intent(this, EditAccountActivity.class);
-                    intent.putExtra(EditAccountActivity.EXTRA_FORCE_REGISTER, false);
-                    if (accounts.size() == 1) {
-                        intent.putExtra("jid", accounts.get(0).getJid().asBareJid().toString());
-                        intent.putExtra("init", true);
-                    } else if (!accounts.isEmpty()) {
-                        intent = new Intent(this, ManageAccountActivity.class);
-                    }
-                    addInviteUri(intent);
-                    startActivity(intent);
+                    this.menu.performIdentifierAction(R.id.action_scan_qr_code, 0);
+                    // final List<Account> accounts = xmppConnectionService.getAccounts();
+                    // Intent intent = new Intent(this, EditAccountActivity.class);
+                    // intent.putExtra(EditAccountActivity.EXTRA_FORCE_REGISTER, false);
+                    // if (accounts.size() == 1) {
+                    //     intent.putExtra("jid", accounts.get(0).getJid().asBareJid().toString());
+                    //     intent.putExtra("init", true);
+                    // } else if (!accounts.isEmpty()) {
+                    //     intent = new Intent(this, ManageAccountActivity.class);
+                    // }
+                    // addInviteUri(intent);
+                    // startActivity(intent);
                 });
+        //KWO: hide button if no camera
+        binding.useExisting.setVisibility(Compatibility.hasFeatureCamera(this) ? Button.VISIBLE : Button.GONE);
     }
 
     @Override
@@ -144,6 +149,7 @@ public class WelcomeActivity extends XmppActivity
         getMenuInflater().inflate(R.menu.welcome_menu, menu);
         final MenuItem scan = menu.findItem(R.id.action_scan_qr_code);
         scan.setVisible(Compatibility.hasFeatureCamera(this));
+        this.menu = menu;
         return super.onCreateOptionsMenu(menu);
     }
 
