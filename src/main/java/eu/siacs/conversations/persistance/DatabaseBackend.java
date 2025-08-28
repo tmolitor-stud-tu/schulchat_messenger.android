@@ -67,7 +67,7 @@ import org.whispersystems.libsignal.state.SignedPreKeyRecord;
 
 public class DatabaseBackend extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "history";
+    private static final String DATABASE_NAME = "kwo_history";
     private static final int DATABASE_VERSION = 54;
 
     private static boolean requiresMessageIndexRebuild = false;
