@@ -96,9 +96,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_alignParentRight="true"
-                                            android:alpha="?attr/icon_alpha"
-                                            android:background="?attr/selectableItemBackgroundBorderless"
-                                            android:src="?attr/icon_edit_body"/>
+                                            android:background="?attr/selectableItemBackgroundBorderless"/>
                                 </TableRow>
                             </TableLayout>
 

@@ -5,6 +5,7 @@
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
+        android:visible="false"
         android:orderInCategory="15"
         android:title="@string/share_uri_with"
         app:showAsAction="ifRoom">
@@ -33,6 +34,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_advanced_mode"
+        android:visible="false"
         android:checkable="true"
         android:checked="false"
         android:orderInCategory="85"
