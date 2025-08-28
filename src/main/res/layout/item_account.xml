@@ -52,6 +52,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:focusable="false"
+            android:visibility="gone"
             android:padding="16dp" />
 
     </RelativeLayout>

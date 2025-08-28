@@ -10,6 +10,7 @@
         app:showAsAction="collapseActionView|always" />
     <item
         android:id="@+id/action_hide_offline"
+        android:visible="false"
         android:checkable="true"
         android:checked="false"
         android:orderInCategory="85"

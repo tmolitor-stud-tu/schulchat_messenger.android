@@ -120,7 +120,8 @@ public class ManageAccountActivity extends XmppActivity
         this.selectedAccount = accountList.get(acmi.position);
         if (this.selectedAccount.isEnabled()) {
             menu.findItem(R.id.mgmt_account_enable).setVisible(false);
-            menu.findItem(R.id.mgmt_account_announce_pgp).setVisible(true);
+            //KWO: keep hidden; the menu xml hides it and this branch used to re-show it
+            menu.findItem(R.id.mgmt_account_announce_pgp).setVisible(false);
         } else {
             menu.findItem(R.id.mgmt_account_disable).setVisible(false);
             menu.findItem(R.id.mgmt_account_announce_pgp).setVisible(false);
