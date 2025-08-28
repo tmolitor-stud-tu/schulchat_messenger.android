@@ -1,6 +1,7 @@
 package eu.siacs.conversations.entities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.SystemClock;
 import android.util.Log;
@@ -19,7 +20,9 @@ import eu.siacs.conversations.crypto.sasl.HashedTokenSha512;
 import eu.siacs.conversations.crypto.sasl.SaslMechanism;
 import eu.siacs.conversations.http.ServiceOutageStatus;
 import eu.siacs.conversations.services.AvatarService;
+import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.Resolver;
+import eu.siacs.conversations.utils.PhoneHelper;
 import eu.siacs.conversations.utils.UIHelper;
 import eu.siacs.conversations.utils.XmppUri;
 import eu.siacs.conversations.xmpp.Jid;
@@ -458,12 +461,17 @@ public class Account extends AbstractEntity implements AvatarService.Avatar {
         this.presenceStatusMessage = message;
     }
 
+    public Context getContext() {
+        return this.xmppConnection.getService();
+    }
+
     public String getResource() {
         return jid.getResource();
     }
 
     public void setResource(final String resource) {
-        this.jid = this.jid.withResource(resource);
+        //KWO: ignore resource argument
+        this.jid = this.jid.withResource(PhoneHelper.getAndroidId(this.xmppConnection.getService()));
     }
 
     public Jid getJid() {

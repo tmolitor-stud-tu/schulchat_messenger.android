@@ -2693,6 +2693,10 @@ public class XmppConnection implements Runnable {
         return this.lastPacketReceived;
     }
 
+    public XmppConnectionService getService() {
+        return this.mXmppConnectionService;
+    }
+
     public void sendActive() {
         this.sendPacket(new Active());
     }
