@@ -786,6 +786,10 @@ public class Conversation extends AbstractEntity
     }
 
     public int getNextEncryption() {
+        //KWO: encryption choices are disabled, so never offer anything but plaintext
+        if (!Config.SUPPORT_ENCRYPTION_CHOICES) {
+            return Message.ENCRYPTION_NONE;
+        }
         if (OmemoSetting.isAlways()) {
             return suitableForOmemoByDefault(this)
                     ? Message.ENCRYPTION_AXOLOTL

@@ -12,9 +12,9 @@ public final class Config {
 
     public static final boolean QUICK_LOG = false;
 
-    public static final Jid BUG_REPORTS = Jid.of("bugs@conversations.im");
-    public static final Uri HELP = Uri.parse("https://help.conversations.im");
-    public static final String MAGIC_CREATE_DOMAIN = "conversations.im";
+    public static final Jid BUG_REPORTS = Jid.of("service@kurswahl-online.de");
+    public static final Uri HELP = Uri.parse("https://kurswahl-online.de");
+    public static final String MAGIC_CREATE_DOMAIN = "kurswahl-online.de";
     public static final Jid QUICKSY_DOMAIN = Jid.of("quicksy.im");
 
     public static final String CHANNEL_DISCOVERY = "https://search.jabber.network";
@@ -82,7 +82,7 @@ public final class Config {
     public static final boolean AUTOMATICALLY_COMPLETE_SESSIONS = true;
     public static final boolean DISABLE_PROXY_LOOKUP =
             false; // disables STUN/TURN and Proxy65 look up (useful to debug IBB fallback)
-    public static final boolean USE_DIRECT_JINGLE_CANDIDATES = true;
+    public static final boolean USE_DIRECT_JINGLE_CANDIDATES = false;
     public static final boolean USE_JINGLE_MESSAGE_INIT = true;
 
     public static final boolean ENABLE_CAPS_CACHE = true;
@@ -128,6 +128,11 @@ public final class Config {
         public static final float LOCATION_FIX_SPACE_DELTA = 10; // m
         public static final int LOCATION_FIX_SIGNIFICANT_TIME_DELTA = 1000 * 60 * 2; // ms
     }
+
+    //KWO: upstream removed the compile time encryption choices (ENCRYPTION_MASK). Keep a kwo
+    //side switch so omemo and openpgp stay unavailable regardless of stored preferences or
+    //per conversation attributes.
+    public static final boolean SUPPORT_ENCRYPTION_CHOICES = false;
 
     // How deep nested quotes should be displayed. '2' means one quote nested in another.
     public static final int QUOTE_MAX_DEPTH = 7;

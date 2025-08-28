@@ -61,20 +61,12 @@
                         android:textAppearance="?textAppearanceBodyMedium" />
 
                     <Button
-                        android:id="@+id/register_new_account"
-                        style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:text="@string/create_new_account" />
-
-                    <Button
                         android:id="@+id/use_existing"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
-                        android:text="@string/i_already_have_an_account" />
+                        android:text="QR-Code scannen" />
                 </LinearLayout>
 
                 <RelativeLayout

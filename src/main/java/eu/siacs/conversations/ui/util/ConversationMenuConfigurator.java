@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import eu.siacs.conversations.R;
+import eu.siacs.conversations.Config;
 import eu.siacs.conversations.crypto.OmemoSetting;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.entities.Conversational;
@@ -42,6 +43,12 @@ public class ConversationMenuConfigurator {
 
     public static void configureEncryptionMenu(@NonNull Conversation conversation, Menu menu) {
         final MenuItem menuSecure = menu.findItem(R.id.action_security);
+
+        //KWO: encryption choices are disabled, so do not offer the menu at all
+        if (!Config.SUPPORT_ENCRYPTION_CHOICES) {
+            menuSecure.setVisible(false);
+            return;
+        }
 
         final boolean participating =
                 conversation.getMode() == Conversational.MODE_SINGLE
