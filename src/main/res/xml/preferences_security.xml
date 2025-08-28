@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="@string/pref_category_e2ee">
-        <ListPreference
+        <!-- <ListPreference
             android:defaultValue="@string/omemo_setting_default"
             android:entries="@array/omemo_setting_entries"
             android:entryValues="@array/omemo_setting_entry_values"
             android:icon="@drawable/ic_lock_24dp"
             android:key="omemo"
             android:summary="@string/pref_omemo_setting_summary_default_on"
-            android:title="@string/pref_omemo_setting" />
+            android:title="@string/pref_omemo_setting" /> -->
         <SwitchPreferenceCompat
             android:defaultValue="@bool/btbv"
             android:icon="@drawable/ic_verified_user_24dp"

@@ -63,12 +63,12 @@
         android:key="grace_period_length"
         android:summary="@string/pref_notification_grace_period_summary"
         android:title="@string/pref_notification_grace_period" />
-    <SwitchPreferenceCompat
+    <!-- <SwitchPreferenceCompat
         android:defaultValue="@bool/notifications_from_strangers"
         android:icon="@drawable/ic_domino_mask_24dp"
         android:key="notifications_from_strangers"
         android:summary="@string/pref_notifications_from_strangers_summary"
-        android:title="@string/pref_notifications_from_strangers" />
+        android:title="@string/pref_notifications_from_strangers" /> -->
 
     <SwitchPreferenceCompat
         android:defaultValue="@bool/enable_foreground_service"
