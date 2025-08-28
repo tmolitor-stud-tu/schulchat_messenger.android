@@ -878,11 +878,12 @@ public class EditAccountActivity extends OmemoActivity
                 } else {
                     setTitle(R.string.action_add_account);
                 }
-                //KWO: don't show username and password fields
-                this.binding.accountJid.setVisibility(View.GONE);
-                this.binding.accountPasswordLayout.setVisibility(View.GONE);
+                //KWO: automatically click next button (doesn't seem to work?)
                 this.binding.saveButton.performClick();
             }
+            //KWO: don't show username and password fields (but don't use the jid layout because we still want to display error texts)
+            this.binding.accountJid.setVisibility(View.GONE);
+            this.binding.accountPasswordLayout.setVisibility(View.GONE);
         }
         SharedPreferences preferences = getPreferences();
         mUseTor =
@@ -1427,17 +1428,22 @@ public class EditAccountActivity extends OmemoActivity
                                     Account.State.NO_INTERNET,
                                     Account.State.MISSING_INTERNET_PERMISSION)
                             .contains(status)) {
-                if (status == Account.State.UNAUTHORIZED
-                        || status == Account.State.DOWNGRADE_ATTACK) {
-                    errorLayout = this.binding.accountPasswordLayout;
-                } else if (mShowOptions
-                        && status == Account.State.SERVER_NOT_FOUND
-                        && this.binding.hostname.getText().length() > 0) {
-                    errorLayout = this.binding.hostnameLayout;
-                } else {
-                    errorLayout = this.binding.accountJidLayout;
-                }
-                errorLayout.setError(getString(this.mAccount.getStatus().getReadableId()));
+                errorLayout = this.binding.accountJidLayout; //KWO: always use the same layout
+                // if (status == Account.State.UNAUTHORIZED
+                //         || status == Account.State.DOWNGRADE_ATTACK) {
+                //     errorLayout = this.binding.accountPasswordLayout;
+                // } else if (mShowOptions
+                //         && status == Account.State.SERVER_NOT_FOUND
+                //         && this.binding.hostname.getText().length() > 0) {
+                //     errorLayout = this.binding.hostnameLayout;
+                // } else {
+                //     errorLayout = this.binding.accountJidLayout;
+                // }
+                //KWO: add server-sent error message
+                String auxText = "";
+                if(!Strings.isNullOrEmpty(this.mAccount.getLastErrorMessage()))
+                    auxText = "\n" + this.mAccount.getLastErrorMessage();
+                errorLayout.setError(getString(this.mAccount.getStatus().getReadableId()) + auxText);
                 if (init || !accountInfoEdited()) {
                     errorLayout.requestFocus();
                 }
