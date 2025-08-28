@@ -20,6 +20,8 @@ import eu.siacs.conversations.databinding.ActivityUriHandlerBinding;
 import eu.siacs.conversations.http.HttpConnectionManager;
 import eu.siacs.conversations.persistance.DatabaseBackend;
 import eu.siacs.conversations.services.QuickConversationsService;
+import eu.siacs.conversations.services.XmppConnectionService;
+import eu.siacs.conversations.utils.Compatibility;
 import eu.siacs.conversations.utils.ProvisioningUtils;
 import eu.siacs.conversations.utils.SignupUtils;
 import eu.siacs.conversations.utils.XmppUri;
@@ -116,6 +118,48 @@ public class UriHandlerActivity extends BaseActivity {
     }
 
     private boolean handleUri(final Uri uri, final boolean scanned) {
+        //KWO: handle provisioning url
+        final Intent intent;
+        final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(true);
+        if (accounts.size() > 0) {
+            //KWO: taken from originalHandleUri() below
+            final XmppUri xmppUri = new XmppUri(uri);
+            if (xmppUri.isAction(XmppUri.ACTION_MESSAGE) || xmppUri.isValidJid()) {
+                return originalHandleUri(uri, scanned);
+            } else {
+                showError(R.string.invalid_jid);
+                return false;
+            }
+        } else {
+            final Uri result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
+            Jid jid = Jid.ofLocalAndDomain(result.getQueryParameter("user"), result.getQueryParameter("domain"));
+            Log.d("DOMAIN", result.getQueryParameter("domain").toLowerCase());
+            Log.d("MAGIC", Config.MAGIC_CREATE_DOMAIN);
+            if (result.getQueryParameter("domain").toLowerCase().endsWith(Config.MAGIC_CREATE_DOMAIN)) {
+                if (jid.getLocal() != null && accounts.contains(jid.asBareJid())) {
+                    showError(R.string.account_already_exists);
+                    return false;
+                }
+        
+                //KWO: this block is taken from ProvisioningUtils.java
+                final Intent serviceIntent = new Intent(this, XmppConnectionService.class);
+                serviceIntent.setAction(XmppConnectionService.ACTION_PROVISION_ACCOUNT);
+                serviceIntent.putExtra("address", jid.asBareJid().toString());
+                serviceIntent.putExtra("password", result.getQueryParameter("token"));
+                Compatibility.startService(this, serviceIntent);
+                intent = new Intent(this, EditAccountActivity.class);
+                intent.putExtra("jid", jid.asBareJid().toString());
+                intent.putExtra("init", true);
+            } else {
+                showError(R.string.account_registrations_are_not_supported);
+                return false;
+            }
+        }
+        startActivity(intent);
+        return true;
+    }
+
+    private boolean originalHandleUri(final Uri uri, final boolean scanned) {
         final Intent intent;
         final XmppUri xmppUri = new XmppUri(uri);
         final List<Jid> accounts = DatabaseBackend.getInstance(this).getAccountJids(false);

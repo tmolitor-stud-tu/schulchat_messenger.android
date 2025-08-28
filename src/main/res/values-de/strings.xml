@@ -524,8 +524,8 @@
     <string name="no_application_to_share_uri">Keine App zum Teilen der URI gefunden</string>
     <string name="share_uri_with">Teile URI mit…</string>
     <string name="agree_and_continue">Zustimmen und fortfahren</string>
-    <string name="magic_create_text">Ein Guide hilft bei der Kontoerstellung auf conversations.im.
-\nWenn du conversations.im als Provider wählst, kannst du mit Nutzern anderer Anbieter kommunizieren, indem du ihnen deine vollständige XMPP-Adresse gibst.</string>
+    <string name="magic_create_text">Ein Guide hilft bei der Kontoerstellung auf kurswahl-online.de.
+\nWenn du kurswahl-online.de als Provider wählst, kannst du mit Nutzern anderer Anbieter kommunizieren, indem du ihnen deine vollständige XMPP-Adresse gibst.</string>
     <string name="your_full_jid_will_be">Deine vollständige XMPP-Adresse lautet: %s</string>
     <string name="create_account">Konto erstellen</string>
     <string name="use_own_provider">Nutze eigenen Provider</string>
@@ -859,10 +859,10 @@
     <string name="add_anway">Trotzdem hinzufügen</string>
     <string name="this_looks_like_channel">Dies sieht aus wie eine Channel-Adresse</string>
     <string name="share_backup_files">Sicherungsdateien teilen</string>
-    <string name="conversations_backup">Sicherung für Conversations</string>
+    <string name="conversations_backup">Sicherung für KWO Messenger</string>
     <string name="event">Ereignis</string>
     <string name="open_backup">Sicherung öffnen</string>
-    <string name="not_a_backup_file">Die von dir ausgewählte Datei ist keine Sicherungsdatei von Conversations</string>
+    <string name="not_a_backup_file">Die von dir ausgewählte Datei ist keine Sicherungsdatei von KWO Messenger</string>
     <string name="account_already_setup">Dieses Konto wurde bereits eingerichtet</string>
     <string name="please_enter_password">Bitte gib das Passwort für dieses Konto ein</string>
     <string name="unable_to_perform_this_action">Diese Aktion konnte nicht durchgeführt werden</string>
@@ -952,7 +952,7 @@
     <string name="failed_deliveries">Fehlgeschlagene Zustellungen</string>
     <string name="more_options">Weitere Optionen</string>
     <string name="no_application_found">Keine Anwendung gefunden</string>
-    <string name="invite_to_app">Einladung zu Conversations</string>
+    <string name="invite_to_app">Einladung zu KWO Messenger</string>
     <string name="unable_to_parse_invite">Einladung kann nicht verarbeitet werden</string>
     <string name="server_does_not_support_easy_onboarding_invites">Server unterstützt keine Generierung von Einladungen</string>
     <string name="no_active_accounts_support_this">Keine aktiven Konten unterstützen diese Funktion</string>

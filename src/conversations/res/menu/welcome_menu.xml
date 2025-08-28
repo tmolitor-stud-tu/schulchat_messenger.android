@@ -9,7 +9,7 @@
         android:visible="@bool/show_qr_code_scan"
         app:showAsAction="ifRoom" />
 
-    <item
+    <!-- <item
         android:id="@+id/action_add_account_with_cert"
         android:title="@string/action_add_account_with_certificate"
         android:visible="true"
@@ -18,5 +18,5 @@
     <item
         android:id="@+id/action_import_backup"
         android:title="@string/restore_backup"
-        app:showAsAction="never" />
+        app:showAsAction="never" /> -->
 </menu>
