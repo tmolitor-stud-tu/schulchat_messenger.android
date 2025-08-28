@@ -752,6 +752,14 @@ public class EditAccountActivity extends OmemoActivity
         }
         this.binding.actionEditYourName.setOnClickListener(this::onEditYourNameClicked);
         this.binding.scanButton.setOnClickListener((v) -> ScanActivity.scan(this));
+
+        //KWO: wire up statusmessage edit button
+        this.binding.actionEditStatusmessage.setOnClickListener(this::onEditStatusmessageClicked);
+    }
+
+    //KWO: proxy because of View argument
+    private void onEditStatusmessageClicked(View view) {
+        changePresence();
     }
 
     private void onEditYourNameClicked(View view) {
@@ -788,8 +796,14 @@ public class EditAccountActivity extends OmemoActivity
         final MenuItem share = menu.findItem(R.id.action_share);
         renewCertificate.setVisible(mAccount != null && mAccount.getPrivateKeyAlias() != null);
 
-        share.setVisible(mAccount != null && !mInitMode);
+        //KWO: do only these instead of the complex if construction below
+        changePresence.setVisible(!mInitMode);
+        //update statusmessage textbox
+        if(mAccount != null)
+            this.binding.statusmessageText.setText(mAccount.getPresenceStatusMessage());
 
+        /*KWO: never show
+        share.setVisible(mAccount != null && !mInitMode);
         if (mAccount != null && mAccount.isOnlineAndConnected()) {
             if (!mAccount.getXmppConnection().getManager(BlockingManager.class).hasFeature()) {
                 showBlocklist.setVisible(false);
@@ -812,6 +826,7 @@ public class EditAccountActivity extends OmemoActivity
             mamPrefs.setVisible(false);
             changePresence.setVisible(false);
         }
+        */
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -863,8 +878,9 @@ public class EditAccountActivity extends OmemoActivity
                 this.binding.accountRegisterNew.setVisibility(View.GONE);
                 setTitle(getString(R.string.account_details));
                 configureActionBar(getSupportActionBar(), !openedFromNotification);
-                //KWO: kwo login text verstecken
+                //KWO: hide kwo login text and show statusmessage layout
                 this.binding.loginText.setVisibility(View.GONE);
+                this.binding.statusmessageLayout.setVisibility(View.VISIBLE);
             } else {
                 this.binding.avater.setVisibility(View.GONE);
                 configureActionBar(
@@ -878,8 +894,9 @@ public class EditAccountActivity extends OmemoActivity
                 } else {
                     setTitle(R.string.action_add_account);
                 }
-                //KWO: automatically click next button (doesn't seem to work?)
+                //KWO: automatically click next button (doesn't always seem to work?) and hide statusmessage text
                 this.binding.saveButton.performClick();
+                this.binding.statusmessageLayout.setVisibility(View.GONE);
             }
             //KWO: don't show username and password fields (but don't use the jid layout because we still want to display error texts)
             this.binding.accountJid.setVisibility(View.GONE);
@@ -1129,6 +1146,8 @@ public class EditAccountActivity extends OmemoActivity
                     } else {
                         xmppConnectionService.changeStatus(mAccount, template, null);
                     }
+                    //KWO: update statusmessage display in avatar card
+                    this.binding.statusmessageText.setText(binding.statusMessage.getText().toString().trim());
                 });
         builder.create().show();
     }

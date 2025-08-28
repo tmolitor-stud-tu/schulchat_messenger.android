@@ -70,6 +70,37 @@
                               android:text="Zugangsdaten erfolgreich eingelesen, bitte auf 'Weiter' tippen, um zu verbinden"
                               android:textAppearance="?textAppearanceTitleLarge" />
 
+                            <TableLayout
+                                android:id="@+id/statusmessage_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:shrinkColumns="0"
+                                android:stretchColumns="1">
+
+                                <TableRow
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="wrap_content"
+                                    tools:ignore="UselessParent">
+
+                                    <TextView
+                                        android:id="@+id/statusmessage_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentLeft="true"
+                                        android:hint="Keine Statusnachricht festgelegt"
+                                        android:textAppearance="?attr/textAppearanceBody1" />
+
+                                    <ImageButton
+                                            android:id="@+id/action_edit_statusmessage"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentRight="true"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            android:src="@drawable/ic_edit_24dp"/>
+                                </TableRow>
+                            </TableLayout>
+
                             <com.google.android.material.textfield.TextInputLayout
                                 android:id="@+id/account_jid_layout"
                                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -636,7 +667,7 @@
                                 android:contentDescription="@string/edit_nick"
                                 android:padding="@dimen/image_button_padding"
                                 android:src="@drawable/ic_edit_24dp"
-                                android:visibility="visible" />
+                                android:visibility="gone" />
                         </RelativeLayout>
 
                         <RelativeLayout
