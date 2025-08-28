@@ -166,6 +166,22 @@ android {
         conversations {
             dimension "mode"
             buildConfigField "String", "PRIVACY_POLICY", "\"https://conversations.im/privacy.html\""
+            buildConfigField "String", "PRIVACY_POLICY", "\"https://kurswahl-online.de/app-privacy.html\""
+
+			applicationId = app_id
+			versionName = version_name
+			versionCode = version_code as int
+			resValue "string", "applicationId", applicationId
+			resValue "string", "app_name", appName
+			resValue "string", "app_server", app_server
+			resValue "string", "push_module_identification", push_module_identification
+			resValue "string", "gcm_defaultSenderId", gcm_defaultSenderId
+			resValue "string", "google_app_id", google_app_id
+			resValue "string", "project_id", project_id
+			resValue "string", "google_api_key", fcm_api_key
+			buildConfigField "String", "APP_NAME", "\"$appName\""
+			buildConfigField("String", "APP_SECRET", '"' + mAppSecret + '"')
+			buildConfigField("String", "LOGTAG", '"KWO_Messenger"')
         }
 
         playstore {
@@ -257,6 +273,7 @@ android {
         buildConfig true
     }
 
+    /*
     android.applicationVariants.configureEach { variant ->
         variant.outputs.each { output ->
             def baseAbiVersionCode = project.ext.abiCodes.get(output.getFilter(com.android.build.OutputFile.ABI))
@@ -266,6 +283,6 @@ android {
                 output.versionCodeOverride = 100 * project.android.defaultConfig.versionCode
             }
         }
-
     }
+    */
 }
