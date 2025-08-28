@@ -52,7 +52,7 @@ public class AccountAdapter extends ArrayAdapter<Account> {
         if (account == null) {
             return view;
         }
-        viewHolder.binding.accountJid.setText(account.getJid().asBareJid().toString());
+        viewHolder.binding.accountJid.setText(account.getDisplayName());
         AvatarWorkerTask.loadAvatar(account, viewHolder.binding.accountImage, R.dimen.avatar);
         final var status = account.getStatus();
         if (account.isServiceOutage()) {
@@ -89,20 +89,22 @@ public class AccountAdapter extends ArrayAdapter<Account> {
                                 androidx.appcompat.R.attr.colorError));
                 break;
         }
-        final boolean isDisabled = (account.getStatus() == Account.State.DISABLED);
-        viewHolder.binding.tglAccountStatus.setOnCheckedChangeListener(null);
-        viewHolder.binding.tglAccountStatus.setChecked(!isDisabled);
-        if (this.showStateButton) {
-            viewHolder.binding.tglAccountStatus.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.binding.tglAccountStatus.setVisibility(View.GONE);
-        }
-        viewHolder.binding.tglAccountStatus.setOnCheckedChangeListener(
-                (compoundButton, b) -> {
-                    if (b == isDisabled && activity instanceof OnTglAccountState tglAccountState) {
-                        tglAccountState.onClickTglAccountState(account, b);
-                    }
-                });
+        //KWO: hide switch
+        viewHolder.binding.tglAccountStatus.setVisibility(View.GONE);
+        // final boolean isDisabled = (account.getStatus() == Account.State.DISABLED);
+        // viewHolder.binding.tglAccountStatus.setOnCheckedChangeListener(null);
+        // viewHolder.binding.tglAccountStatus.setChecked(!isDisabled);
+        // if (this.showStateButton) {
+        //     viewHolder.binding.tglAccountStatus.setVisibility(View.VISIBLE);
+        // } else {
+        //     viewHolder.binding.tglAccountStatus.setVisibility(View.GONE);
+        // }
+        // viewHolder.binding.tglAccountStatus.setOnCheckedChangeListener(
+        //         (compoundButton, b) -> {
+        //             if (b == isDisabled && activity instanceof OnTglAccountState tglAccountState) {
+        //                 tglAccountState.onClickTglAccountState(account, b);
+        //             }
+        //         });
         return view;
     }
 
