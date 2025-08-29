@@ -13,7 +13,7 @@ import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.ActivityMagicCreateBinding;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.utils.CryptoHelper;
-import eu.siacs.conversations.utils.InstallReferrerUtils;
+// import eu.siacs.conversations.utils.InstallReferrerUtils;
 import eu.siacs.conversations.xmpp.Jid;
 import java.security.SecureRandom;
 
@@ -120,7 +120,8 @@ public class MagicCreateActivity extends XmppActivity implements TextWatcher {
 
     @Override
     public void onDestroy() {
-        InstallReferrerUtils.markInstallReferrerExecuted(this);
+        // KWO: No install referrer
+        // InstallReferrerUtils.markInstallReferrerExecuted(this);
         super.onDestroy();
     }
 

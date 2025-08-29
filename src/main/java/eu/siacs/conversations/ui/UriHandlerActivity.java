@@ -133,8 +133,32 @@ public class UriHandlerActivity extends BaseActivity {
                 return false;
             }
         }
-        
-        final Uri result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
+
+        Uri result = null;
+        // KWO: If we have a kwologin:// URI (format user:token@domain), convert it to
+        // http://example.com?user=user&token=token&domain=domain URI for easier parsing
+        if ("kwologin".equalsIgnoreCase(uri.getScheme())) {
+            String user = null;
+            String token = null;
+            String domain = null;
+            String[] userAndRest = uri.getSchemeSpecificPart().split("@");
+            if(userAndRest.length == 2) {
+                domain = userAndRest[1].replaceFirst("/+$", "");
+                String[] userAndToken = userAndRest[0].split(":");
+                if(userAndToken.length == 2) {
+                    user = userAndToken[0].replaceFirst("^/+", "");
+                    token = userAndToken[1];
+                }
+            }
+            if(user == null || token == null || domain == null) {
+                Log.d(Config.LOGTAG, "Not handling uri, could not parse user, token or domain: " + uri);
+                return false;
+            }
+            result = Uri.parse(Uri.decode("http://example.com?user=" + user + "&token=" + token + "&domain=" + domain));
+        }
+        else {
+            result = Uri.parse(Uri.decode("http://example.com?" + uri.toString()));
+        }
         Log.d(Config.LOGTAG, "handleUri(): result uri: " + result);
         if(result.getQueryParameter("user") == null || result.getQueryParameter("domain") == null) {
             Log.d(Config.LOGTAG, "Not handling uri, no user or domain query params given: " + uri);
