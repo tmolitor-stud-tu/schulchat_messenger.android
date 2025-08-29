@@ -27,7 +27,7 @@ import eu.siacs.conversations.databinding.ActivityWelcomeBinding;
 import eu.siacs.conversations.entities.Account;
 import eu.siacs.conversations.services.XmppConnectionService;
 import eu.siacs.conversations.utils.Compatibility;
-import eu.siacs.conversations.utils.InstallReferrerUtils;
+// import eu.siacs.conversations.utils.InstallReferrerUtils;
 import eu.siacs.conversations.utils.SignupUtils;
 import eu.siacs.conversations.xmpp.Jid;
 import java.util.Arrays;
@@ -90,7 +90,8 @@ public class WelcomeActivity extends QrCodeProcessingActivity
     @Override
     public void onStart() {
         super.onStart();
-        new InstallReferrerUtils(this);
+        // KWO: No install referrer
+        // new InstallReferrerUtils(this);
     }
 
     @Override

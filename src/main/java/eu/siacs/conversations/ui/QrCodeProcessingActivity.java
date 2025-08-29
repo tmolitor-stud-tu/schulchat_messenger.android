@@ -2,6 +2,7 @@ package eu.siacs.conversations.ui;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import de.gultsch.common.MiniUri;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.DialogOpenBrowserBinding;
+import eu.siacs.conversations.utils.KwoProvisioning;
 import eu.siacs.conversations.utils.ScanResultProcessor;
 import eu.siacs.conversations.utils.XmppUriLauncher;
 
@@ -21,6 +23,11 @@ public abstract class QrCodeProcessingActivity extends QrCodeScanningActivity {
 
     @Override
     public void onQrCodeScanned(final String code) {
+        //KWO: a scanned provisioning link is not a MiniUri, so it has to be handled before the
+        //scan result processor rejects it as 'not a URI'
+        if (KwoProvisioning.handle(this, code == null ? null : Uri.parse(code))) {
+            return;
+        }
         final var scanResultProcessor = new ScanResultProcessor(this);
         final var future = scanResultProcessor.process(code);
         Futures.addCallback(
