@@ -28,14 +28,14 @@
             android:key="allow_message_correction"
             android:summary="@string/pref_allow_message_correction_summary"
             android:title="@string/pref_allow_message_correction" />
-        <SwitchPreferenceCompat
+        <!-- <SwitchPreferenceCompat
             android:defaultValue="@bool/accept_invites_from_strangers"
             android:icon="@drawable/ic_domino_mask_24dp"
             android:key="accept_invites_from_strangers"
             android:summary="@string/pref_accept_invites_from_strangers_summary"
-            android:title="@string/pref_accept_invites_from_strangers" />
+            android:title="@string/pref_accept_invites_from_strangers" /> -->
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_presence_settings">
+    <!-- <PreferenceCategory android:title="@string/pref_presence_settings">
         <SwitchPreferenceCompat
             android:defaultValue="@bool/manually_change_presence"
             android:disableDependentsState="true"
@@ -64,7 +64,7 @@
             android:key="treat_vibrate_as_silent"
             android:summary="@string/pref_treat_vibrate_as_dnd_summary"
             android:title="@string/pref_treat_vibrate_as_silent" />
-    </PreferenceCategory>
+    </PreferenceCategory> -->
     <PreferenceCategory android:title="@string/pref_category_application">
         <SwitchPreferenceCompat
             android:defaultValue="@bool/send_crash_reports"

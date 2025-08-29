@@ -6,11 +6,11 @@
         app:fragment="eu.siacs.conversations.ui.fragment.settings.InterfaceSettingsFragment"
         app:summary="@string/pref_summary_appearance"
         app:title="@string/pref_title_interface" />
-    <Preference
+    <!-- <Preference
         android:icon="@drawable/ic_security_24dp"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.SecuritySettingsFragment"
         app:summary="@string/pref_summary_security"
-        app:title="@string/pref_title_security" />
+        app:title="@string/pref_title_security" /> -->
     <Preference
         android:icon="@drawable/ic_privacy_tip_24dp"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.PrivacySettingsFragment"
@@ -26,24 +26,24 @@
         android:summary="@string/pref_attachments_summary"
         android:title="@string/pref_attachments"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.AttachmentsSettingsFragment" />
-    <Preference
+    <!-- <Preference
         android:icon="@drawable/ic_settings_ethernet_24dp"
         android:key="connection"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.ConnectionSettingsFragment"
         app:summary="@string/pref_connection_summary_w_cd"
-        app:title="@string/pref_connection_options" />
-    <Preference
+        app:title="@string/pref_connection_options" /> -->
+    <!-- <Preference
         android:icon="@drawable/ic_archive_24dp"
         android:key="backup"
         android:summary="@string/pref_backup_summary"
         android:title="@string/backup"
-        app:fragment="eu.siacs.conversations.ui.fragment.settings.BackupSettingsFragment" />
-    <Preference
+        app:fragment="eu.siacs.conversations.ui.fragment.settings.BackupSettingsFragment" /> -->
+    <!-- <Preference
         android:icon="@drawable/ic_cloud_sync_24dp"
         android:key="up"
         app:fragment="eu.siacs.conversations.ui.fragment.settings.UpSettingsFragment"
         app:summary="@string/unified_push_summary"
-        app:title="@string/unified_push_distributor" />
+        app:title="@string/unified_push_distributor" /> -->
     <Preference
         android:key="about"
         android:title="@string/title_activity_about_x">
