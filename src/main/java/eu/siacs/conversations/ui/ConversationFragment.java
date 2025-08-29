@@ -1149,7 +1149,7 @@ public class ConversationFragment extends XmppFragment
         menuInflater.inflate(R.menu.fragment_conversation, menu);
         final MenuItem menuMucDetails = menu.findItem(R.id.action_muc_details);
         final MenuItem menuContactDetails = menu.findItem(R.id.action_contact_details);
-        final MenuItem menuInviteContact = menu.findItem(R.id.action_invite);
+        // final MenuItem menuInviteContact = menu.findItem(R.id.action_invite);
         final MenuItem menuMute = menu.findItem(R.id.action_mute);
         final MenuItem menuUnmute = menu.findItem(R.id.action_unmute);
         final MenuItem menuCall = menu.findItem(R.id.action_call);
@@ -1160,7 +1160,7 @@ public class ConversationFragment extends XmppFragment
         if (conversation != null) {
             if (conversation.getMode() == Conversation.MODE_MULTI) {
                 menuContactDetails.setVisible(false);
-                menuInviteContact.setVisible(conversation.getMucOptions().canInvite());
+                // menuInviteContact.setVisible(conversation.getMucOptions().canInvite());
                 menuMucDetails.setTitle(
                         conversation.getMucOptions().isPrivateAndNonAnonymous()
                                 ? R.string.action_muc_details
@@ -1190,8 +1190,8 @@ public class ConversationFragment extends XmppFragment
                 menuContactDetails.setVisible(!this.conversation.withSelf());
                 menuMucDetails.setVisible(false);
                 final var connection = this.conversation.getAccount().getXmppConnection();
-                menuInviteContact.setVisible(
-                        !connection.getManager(MultiUserChatManager.class).getServices().isEmpty());
+                // menuInviteContact.setVisible(
+                //         !connection.getManager(MultiUserChatManager.class).getServices().isEmpty());
             }
             if (conversation.isMuted()) {
                 menuMute.setVisible(false);
@@ -1570,11 +1570,11 @@ public class ConversationFragment extends XmppFragment
             case R.id.action_muc_details:
                 ConferenceDetailsActivity.open(getActivity(), conversation);
                 break;
-            case R.id.action_invite:
-                startActivityForResult(
-                        ChooseContactActivity.create(activity, conversation),
-                        REQUEST_INVITE_TO_CONVERSATION);
-                break;
+            // case R.id.action_invite:
+            //     startActivityForResult(
+            //             ChooseContactActivity.create(activity, conversation),
+            //             REQUEST_INVITE_TO_CONVERSATION);
+            //     break;
             case R.id.action_clear_history:
                 clearHistoryDialog(conversation);
                 break;

@@ -94,11 +94,11 @@
         android:orderInCategory="40"
         android:title="@string/action_muc_details"
         app:showAsAction="never" />
-    <item
+    <!-- <item
         android:id="@+id/action_invite"
         android:orderInCategory="45"
         android:title="@string/invite_contact"
-        app:showAsAction="never" />
+        app:showAsAction="never" /> -->
     <item
         android:id="@+id/action_search"
         android:orderInCategory="48"

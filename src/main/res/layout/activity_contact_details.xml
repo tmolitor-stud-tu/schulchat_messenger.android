@@ -125,6 +125,7 @@
                             android:layout_below="@+id/tags"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="8sp"
+                            android:visibility="gone"
                             android:textAppearance="?textAppearanceTitleSmall"
                             tools:text="@string/just_now" />
 
@@ -149,12 +150,14 @@
                                 android:id="@+id/details_send_presence"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:text="@string/send_presence_updates" />
 
                             <CheckBox
                                 android:id="@+id/details_receive_presence"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:visibility="gone"
                                 android:text="@string/receive_presence_updates" />
                         </LinearLayout>
 
@@ -166,6 +169,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
                             android:layout_marginTop="16sp"
+                            android:visibility="gone"
                             android:text="@string/using_account"
                             android:textAppearance="?textAppearanceLabelMedium" />
                     </RelativeLayout>

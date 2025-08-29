@@ -38,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:textAppearance="?textAppearanceBodyMedium"
                 tools:text="juliet@capulet.example" />
 
@@ -67,8 +68,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
+                android:visibility="gone"
                 android:textAppearance="?textAppearanceBodyMedium"
-                android:visibility="gone" />
+                android:visible="false" />
         </LinearLayout>
 
     </RelativeLayout>

@@ -139,7 +139,7 @@ public class UserAdapter extends ListAdapter<MucOptions.User, UserAdapter.ViewHo
         viewHolder.binding.contactJid.setVisibility(View.GONE);
 
         if (advancedMode && user.getPgpKeyId() != 0) {
-            viewHolder.binding.key.setVisibility(View.VISIBLE);
+            viewHolder.binding.key.setVisibility(View.GONE);
             viewHolder.binding.key.setOnClickListener(
                     v -> {
                         final XmppActivity activity = XmppActivity.find(v);

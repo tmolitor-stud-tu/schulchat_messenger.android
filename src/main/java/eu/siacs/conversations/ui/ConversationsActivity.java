@@ -686,8 +686,8 @@ public class ConversationsActivity extends XmppActivity
         actionBar.setTitle(conversation.getName());
         if (conversation.getMode() == Conversational.MODE_SINGLE && this.mShowLastUserInteraction) {
             final var contact = conversation.getContact();
-            actionBar.setSubtitle(
-                    UIHelper.lastUserInteraction(this, contact.getLastUserInteraction()));
+            // actionBar.setSubtitle(
+            //         UIHelper.lastUserInteraction(this, contact.getLastUserInteraction()));
         } else if (conversation.getMode() == Conversation.MODE_MULTI) {
             final var mucOptions = conversation.getMucOptions();
             final var userCount = mucOptions.getUserCount();

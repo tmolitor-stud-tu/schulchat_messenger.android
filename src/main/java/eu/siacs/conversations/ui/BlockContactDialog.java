@@ -8,6 +8,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import eu.siacs.conversations.R;
 import eu.siacs.conversations.databinding.DialogBlockContactBinding;
 import eu.siacs.conversations.entities.Blockable;
+import eu.siacs.conversations.entities.Contact;
 import eu.siacs.conversations.entities.Conversation;
 import eu.siacs.conversations.ui.util.JidDialog;
 
@@ -50,7 +51,11 @@ public final class BlockContactDialog {
                     isBlocked
                             ? R.string.action_unblock_participant
                             : R.string.action_block_participant);
-            value = blockable.getAddress().toString();
+			//KWO: show full name instead of jid
+			if(blockable instanceof Contact)
+				value = ((Contact)blockable).getDisplayName();
+			else
+				value = blockable.getAddress().toString();
             res = isBlocked ? R.string.unblock_contact_text : R.string.block_contact_text;
         } else if (blockable.getAddress().getLocal() == null
                 || blockable.getAccount().isBlocked(blockable.getAddress().getDomain())) {
@@ -61,8 +66,8 @@ public final class BlockContactDialog {
         } else {
             if (isBlocked) {
                 builder.setTitle(R.string.action_unblock_contact);
-            } else if (serverMsgId != null) {
-                builder.setTitle(R.string.report_spam_and_block);
+            // } else if (serverMsgId != null) {
+            //     builder.setTitle(R.string.report_spam_and_block);
             } else {
                 final int resBlockAction =
                         blockable instanceof Conversation
@@ -71,7 +76,14 @@ public final class BlockContactDialog {
                                 : R.string.action_block_contact;
                 builder.setTitle(resBlockAction);
             }
-            value = blockable.getAddress().asBareJid().toString();
+            //KWO: show full name instead of jid
+			//value = blockable.getJid().asBareJid().toEscapedString();
+			if(blockable instanceof Conversation)
+				value = ((Conversation) blockable).getContact().getDisplayName();
+			else if(blockable instanceof Contact)
+				value = ((Contact)blockable).getDisplayName();
+			else
+				value = blockable.getAddress().asBareJid().toString();
             res = isBlocked ? R.string.unblock_contact_text : R.string.block_contact_text;
         }
         binding.text.setText(JidDialog.style(xmppActivity, res, value));

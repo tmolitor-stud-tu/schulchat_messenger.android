@@ -343,50 +343,50 @@ public class ContactDetailsActivity extends OmemoActivity
             case R.id.action_share_uri:
                 shareLink(false);
                 break;
-            case R.id.action_delete_contact:
-                final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-                builder.setNegativeButton(getString(R.string.cancel), null);
-                builder.setTitle(getString(R.string.action_delete_contact))
-                        .setMessage(
-                                JidDialog.style(
-                                        this,
-                                        R.string.remove_contact_text,
-                                        contact.getAddress().toString()))
-                        .setPositiveButton(getString(R.string.delete), removeFromRoster)
-                        .create()
-                        .show();
-                break;
-            case R.id.action_edit_contact:
-                final Uri systemAccount = contact.getSystemAccount();
-                if (systemAccount == null) {
-                    quickEdit(
-                            contact.getServerName(),
-                            R.string.contact_name,
-                            value -> {
-                                contact.setServerName(value);
-                                final var connection = contact.getAccount().getXmppConnection();
-                                connection
-                                        .getManager(RosterManager.class)
-                                        .addRosterItem(contact, null);
-                                populateView();
-                                return null;
-                            },
-                            true);
-                } else {
-                    Intent intent = new Intent(Intent.ACTION_EDIT);
-                    intent.setDataAndType(systemAccount, Contacts.CONTENT_ITEM_TYPE);
-                    intent.putExtra("finishActivityOnSaveCompleted", true);
-                    try {
-                        startActivity(intent);
-                    } catch (ActivityNotFoundException e) {
-                        Toast.makeText(
-                                        ContactDetailsActivity.this,
-                                        R.string.no_application_found_to_view_contact,
-                                        Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                }
-                break;
+            // case R.id.action_delete_contact:
+            //     final MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
+            //     builder.setNegativeButton(getString(R.string.cancel), null);
+            //     builder.setTitle(getString(R.string.action_delete_contact))
+            //             .setMessage(
+            //                     JidDialog.style(
+            //                             this,
+            //                             R.string.remove_contact_text,
+            //                             contact.getAddress().toString()))
+            //             .setPositiveButton(getString(R.string.delete), removeFromRoster)
+            //             .create()
+            //             .show();
+            //     break;
+            // case R.id.action_edit_contact:
+            //     final Uri systemAccount = contact.getSystemAccount();
+            //     if (systemAccount == null) {
+            //         quickEdit(
+            //                 contact.getServerName(),
+            //                 R.string.contact_name,
+            //                 value -> {
+            //                     contact.setServerName(value);
+            //                     final var connection = contact.getAccount().getXmppConnection();
+            //                     connection
+            //                             .getManager(RosterManager.class)
+            //                             .addRosterItem(contact, null);
+            //                     populateView();
+            //                     return null;
+            //                 },
+            //                 true);
+            //     } else {
+            //         Intent intent = new Intent(Intent.ACTION_EDIT);
+            //         intent.setDataAndType(systemAccount, Contacts.CONTENT_ITEM_TYPE);
+            //         intent.putExtra("finishActivityOnSaveCompleted", true);
+            //         try {
+            //             startActivity(intent);
+            //         } catch (ActivityNotFoundException e) {
+            //             Toast.makeText(
+            //                             ContactDetailsActivity.this,
+            //                             R.string.no_application_found_to_view_contact,
+            //                             Toast.LENGTH_SHORT)
+            //                     .show();
+            //         }
+            //     }
+            //     break;
             case R.id.action_block, R.id.action_unblock:
                 BlockContactDialog.show(this, contact);
                 break;
@@ -411,8 +411,8 @@ public class ContactDetailsActivity extends OmemoActivity
         AccountUtils.showHideMenuItems(menu);
         final MenuItem block = menu.findItem(R.id.action_block);
         final MenuItem unblock = menu.findItem(R.id.action_unblock);
-        final MenuItem edit = menu.findItem(R.id.action_edit_contact);
-        final MenuItem delete = menu.findItem(R.id.action_delete_contact);
+        // final MenuItem edit = menu.findItem(R.id.action_edit_contact);
+        // final MenuItem delete = menu.findItem(R.id.action_delete_contact);
         final MenuItem customNotifications = menu.findItem(R.id.action_custom_notifications);
         customNotifications.setVisible(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R);
         if (contact == null) {
@@ -429,10 +429,10 @@ public class ContactDetailsActivity extends OmemoActivity
             unblock.setVisible(false);
             block.setVisible(false);
         }
-        if (!contact.showInRoster()) {
-            edit.setVisible(false);
-            delete.setVisible(false);
-        }
+        // if (!contact.showInRoster()) {
+        //     edit.setVisible(false);
+        //     delete.setVisible(false);
+        // }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -443,8 +443,8 @@ public class ContactDetailsActivity extends OmemoActivity
         invalidateOptionsMenu();
         setTitle(contact.getDisplayName());
         if (contact.showInRoster()) {
-            binding.detailsSendPresence.setVisibility(View.VISIBLE);
-            binding.detailsReceivePresence.setVisibility(View.VISIBLE);
+            binding.detailsSendPresence.setVisibility(View.GONE);
+            binding.detailsReceivePresence.setVisibility(View.GONE);
             binding.addContactButton.setVisibility(View.GONE);
             binding.detailsSendPresence.setOnCheckedChangeListener(null);
             binding.detailsReceivePresence.setOnCheckedChangeListener(null);
@@ -507,15 +507,15 @@ public class ContactDetailsActivity extends OmemoActivity
             binding.statusMessage.setVisibility(View.GONE);
         }
 
-        if (contact.isBlocked() && !this.showDynamicTags) {
-            binding.detailsLastSeen.setVisibility(View.VISIBLE);
-            binding.detailsLastSeen.setText(R.string.contact_blocked);
-        } else {
-            binding.detailsLastSeen.setVisibility(View.GONE);
-        }
+        // if (contact.isBlocked() && !this.showDynamicTags) {
+        //     binding.detailsLastSeen.setVisibility(View.VISIBLE);
+        //     binding.detailsLastSeen.setText(R.string.contact_blocked);
+        // } else {
+        //     binding.detailsLastSeen.setVisibility(View.GONE);
+        // }
+        binding.detailsLastSeen.setVisibility(View.GONE);
 
-        binding.detailsContactXmppAddress.setText(
-                IrregularUnicodeDetector.style(this, contact.getAddress()));
+        binding.detailsContactXmppAddress.setText(contact.getDisplayName());
         final String account = contact.getAccount().getJid().asBareJid().toString();
         binding.detailsAccount.setOnClickListener(this::onDetailsAccountClicked);
         binding.detailsAccount.setText(getString(R.string.using_account, account));
@@ -617,7 +617,7 @@ public class ContactDetailsActivity extends OmemoActivity
         if ((tagList.isEmpty() && !hasMetaTags) || !this.showDynamicTags) {
             binding.tags.setVisibility(View.GONE);
         } else {
-            binding.tags.setVisibility(View.VISIBLE);
+            binding.tags.setVisibility(View.GONE);
             binding.tags.removeViews(1, binding.tags.getChildCount() - 1);
             final ImmutableList.Builder<Integer> viewIdBuilder = new ImmutableList.Builder<>();
             for (final ListItem.Tag tag : tagList) {
