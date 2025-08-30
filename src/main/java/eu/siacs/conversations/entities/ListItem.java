@@ -44,9 +44,14 @@ public interface ListItem extends Comparable<ListItem>, AvatarService.Avatar {
     }
 
     private boolean matchInItem(final String needle) {
+        //KWO: don't match jid
+        return getDisplayName().toLowerCase(Locale.US).contains(needle)
+                || matchInTag(needle);
+        /*
         return getAddress().toString().contains(needle)
                 || getDisplayName().toLowerCase(Locale.US).contains(needle)
                 || matchInTag(needle);
+        */
     }
 
     private boolean matchInTag(final String needle) {

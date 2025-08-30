@@ -148,9 +148,11 @@ public class StartConversationActivity extends XmppActivity
                                             mSearchEditText, InputMethodManager.SHOW_IMPLICIT);
                                 }
                             });
+                    /*KWO: speed dial removed
                     if (binding.speedDial.isOpen()) {
                         binding.speedDial.close();
                     }
+                    */
                     return true;
                 }
 
@@ -193,7 +195,8 @@ public class StartConversationActivity extends XmppActivity
             new OnBackPressedCallback(false) {
                 @Override
                 public void handleOnBackPressed() {
-                    binding.speedDial.close();
+                    //KWO: speed dial removed
+                    //binding.speedDial.close();
                 }
             };
     private Pair<Integer, Intent> mPostponedActivityResult;
@@ -293,7 +296,8 @@ public class StartConversationActivity extends XmppActivity
         setSupportActionBar(binding.toolbar);
         configureActionBar(getSupportActionBar());
 
-        inflateFab(binding.speedDial, R.menu.start_conversation_fab_submenu);
+        //KWO: speed dial removed
+        //inflateFab(binding.speedDial, R.menu.start_conversation_fab_submenu);
         binding.tabLayout.setupWithViewPager(binding.startConversationViewPager);
         binding.startConversationViewPager.addOnPageChangeListener(
                 new ViewPager.SimpleOnPageChangeListener() {
@@ -311,9 +315,11 @@ public class StartConversationActivity extends XmppActivity
 
         final SharedPreferences preferences = getPreferences();
 
+        /*KWO: we never want this even if this becomes default true in the future
         this.mHideOfflineContacts =
                 QuickConversationsService.isConversations()
                         && preferences.getBoolean("hide_offline", false);
+        */
 
         final boolean startSearching =
                 preferences.getBoolean(
@@ -343,6 +349,7 @@ public class StartConversationActivity extends XmppActivity
                         && savedInstanceState.getBoolean("requested_contacts_permission", false));
         mOpenedFab.set(
                 savedInstanceState != null && savedInstanceState.getBoolean("opened_fab", false));
+        /*KWO: speed dial removed
         binding.speedDial.setOnChangeListener(
                 new SpeedDialView.OnChangeListener() {
                     @Override
@@ -390,10 +397,12 @@ public class StartConversationActivity extends XmppActivity
                     }
                     return false;
                 });
+        */
         final var backDispatcher = this.getOnBackPressedDispatcher();
         backDispatcher.addCallback(this, this.fabBackPressedCallback);
     }
 
+    /*KWO: not needed because speed dial was removed
     private void inflateFab(final SpeedDialView speedDialView, final @MenuRes int menuRes) {
         speedDialView.clearActionItems();
         final PopupMenu popupMenu = new PopupMenu(this, new View(this));
@@ -426,6 +435,7 @@ public class StartConversationActivity extends XmppActivity
         speedDialView.setContentDescription(
                 getString(R.string.add_contact_or_create_or_join_group_chat));
     }
+    */
 
     public static boolean isValidJid(final String input) {
         try {
@@ -784,6 +794,11 @@ public class StartConversationActivity extends XmppActivity
             menuHideOffline.setVisible(true);
             menuHideOffline.setChecked(this.mHideOfflineContacts);
         }
+
+        //KWO: always hide these menu items
+        menuHideOffline.setVisible(false);
+        qrCodeScanMenuItem.setVisible(false);
+
         mMenuSearchView = menu.findItem(R.id.action_search);
         mMenuSearchView.setOnActionExpandListener(mOnActionExpandListener);
         View mSearchView = mMenuSearchView.getActionView();
@@ -1035,6 +1050,7 @@ public class StartConversationActivity extends XmppActivity
         if (QuickConversationsService.isQuicksy()) {
             setRefreshing(xmppConnectionService.getQuickConversationsService().isSynchronizing());
         }
+        /*KWO: speed dial removed
         if (QuickConversationsService.isConversations()
                 && AccountUtils.hasEnabledAccounts(xmppConnectionService)
                 && this.contacts.isEmpty()
@@ -1042,6 +1058,7 @@ public class StartConversationActivity extends XmppActivity
                 && mOpenedFab.compareAndSet(false, true)) {
             binding.speedDial.open();
         }
+        */
     }
 
     protected boolean processViewIntent(@NonNull Intent intent) {

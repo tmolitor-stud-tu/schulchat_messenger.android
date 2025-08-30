@@ -83,7 +83,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
         if (item instanceof Contact contact) {
             hasMetaTags =
                     contact.isBlocked()
-                            || contact.getShownStatus() != Presence.Availability.OFFLINE;
+                            /*KWO: we don't want online/offline tags: || contact.getShownStatus() != Presence.Availability.OFFLINE*/;
         } else {
             hasMetaTags = false;
         }
@@ -123,6 +123,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
                     tv.setId(id);
                     viewIdBuilder.add(id);
                     viewHolder.tags.addView(tv);
+                /*KWO: we don't want online/offline tags: 
                 } else {
                     final Presence.Availability status = contact.getShownStatus();
                     if (status != Presence.Availability.OFFLINE) {
@@ -135,6 +136,7 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
                         viewIdBuilder.add(id);
                         viewHolder.tags.addView(tv);
                     }
+                */
                 }
             }
             viewHolder.flowWidget.setReferencedIds(Ints.toArray(viewIdBuilder.build()));
