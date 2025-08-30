@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.helper.widget.Flow;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import eu.siacs.conversations.AppSettings;
 import eu.siacs.conversations.Config;
 import eu.siacs.conversations.R;
@@ -75,7 +77,11 @@ public class ListItemAdapter extends ArrayAdapter<ListItem> {
             Log.d(Config.LOGTAG, "item " + item.getDisplayName() + " is activated");
         }
         // view.setBackground(StyledAttributes.getDrawable(view.getContext(),R.attr.list_item_background));
-        final var tags = item.getTags();
+        //KWO: we don't want online/offline tags, so drop them before rendering
+        final var tags =
+                ImmutableList.copyOf(
+                        Iterables.filter(
+                                item.getTags(), t -> !(t instanceof DynamicTag.Status)));
         if ((isBlockNoteworthy && Contact.isNoteworthy(tags)) || this.showDynamicTags) {
             UserAdapter.setHats(viewHolder.tags, tags, mOnTagClickedListener);
         } else {
